@@ -1,58 +1,73 @@
 <template>
   <div id="app">
-    
+    <Skeleton title :row="6" />
+    <router-view class="child-view"></router-view>
+    <TabBar :data="tabBarData" />
   </div>
 </template>
 
 <script>
-import { onMounted } from 'vue'
-import * as dd from "dingtalk-jsapi"; // 钉钉JSAPI
+import { onMounted, reactive } from 'vue'
+import { Skeleton, Button } from 'vant';
 
-import { getToken, getJsApiTicket, getJsApiSignature } from '@/utils/biz'
+import { TabBar } from '@/components'
+import { ddAuth, utilScan, setMenu } from '@/utils'
 
-const Settings = require('@/utils/const')
+ const tabBarData = [
+  {label: '首页', name: 'home', icon: 'wap-home', path: '/home'},
+  {label: '分类', name: 'classification', icon: 'smile-comment', path: '/classification'},
+  {label: '购物车', name: 'cart', icon: 'shopping-cart', path: '/cart'},
+  {label: '我', name: 'me', icon: 'manager', path: '/me'}
+];
 
 export default {
   name: 'App',
-  setup (){
-    onMounted(async () => {
-      const timeStamp = Date.now()
-      const nonce = 'zhejianglab'
-
-      const url = window.location.href.replace(window.location.hash, '')
-      const access_token = await getToken(Settings)
-      const ticket = await getJsApiTicket({ access_token })
-      const signature = getJsApiSignature(ticket, nonce, timeStamp, url)
-
-      // 鉴权
-      dd.config({
-        agentId: Settings.agentId,
-        corpId: Settings.corpId, //必填，企业ID
-        timeStamp, // 必填，生成签名的时间戳
-        nonceStr: nonce, // 必填，生成签名的随机串
-        signature, // 必填，签名
-        jsApiList: [
-          'biz.user.get',
-          'device.geolocation.get',
-          'biz.contact.complexPicker',
-          'biz.util.uploadImage',
-          'biz.user.get'
-        ] 
-      })
-
-      dd.ready(() => {
-        dd.runtime.permission.requestAuthCode({
-          corpId: Settings.corpId,
-          onSuccess: (result) => {
-            console.log('===result===', result)
-          }
-        })
-      })
-
-      dd.error(function(err) {
-        console.error('error', err);
-      });
+  components: {
+    Button,
+    Skeleton,
+    TabBar
+  },
+  setup() {
+    const state = reactive({
+      userInfo: null
     })
+
+    const handleClick = () => {
+      utilScan({
+        type: 'barCode',
+        onSuccess: (data) => {
+          console.log('data2', data)
+        }
+      })
+    }
+
+    onMounted(async () => {
+      const result = await ddAuth()
+      console.log('appResult', result)
+      setMenu({
+        backgroundColor: "#ADD8E6",
+        textColor: "#ADD8E611",
+        items: [
+            {
+              "id": "1",// 字符串
+              "iconId": "scan",//字符串，图标命名
+              "text": "扫码"
+            },
+        ],
+        onSuccess: function(data) {
+          console.log('data', data)
+        },
+        onFail: function(err) {
+          console.log('err', err)
+        }
+      })
+    })
+
+    return {
+      state,
+      handleClick,
+      tabBarData
+    }
   }
 }
 </script>

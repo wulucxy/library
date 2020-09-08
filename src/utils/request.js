@@ -1,5 +1,9 @@
 import axios from 'axios';
 import qs from 'qs';
+// import url from 'url'
+
+import { addSearchParam } from './base'
+import { getToken, getAuthCode } from './tools'
 
 // 抛出 http 异常
 export const HttpError = (message, code) => {
@@ -26,6 +30,18 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
+    // todo: 后端接口地址(非钉钉服务)
+    if (/^(\/)?api/.test(config.url)) {
+      config.baseURL = process.env.VUE_APP_BASE_API;
+      if (getToken() && getAuthCode()) {
+        console.log('config.headers', config.headers)
+        config.headers.Authorization = getToken();
+      }
+    } else if(/^(\/)?dd/.test(config.url)) {
+      // 钉钉接口
+      const parsed = addSearchParam(config.url, 'access_token', getToken())
+      config.url = parsed
+    }
     config.headers['Content-Type'] = 'application/json';
     return config;
   },

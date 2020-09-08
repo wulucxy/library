@@ -13,6 +13,7 @@ module.exports = {
       warnings: false,
       errors: true,
     },
+    historyApiFallback: true,
     proxy: {
       '/dd': {
         ws: false,
