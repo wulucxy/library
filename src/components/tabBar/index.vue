@@ -17,7 +17,9 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { Tabbar, TabbarItem } from 'vant';
+
 export default {
   name: 'TabBar',
   components: {
@@ -29,16 +31,18 @@ export default {
       type: Array,
       default: () => []
     },
+    activeTabBar: String,
+    changeActive: Function,
     tabBarActiveColor: {
       type: String,
       default: '#e43130'
     }  
   },
   setup(props) {
-    const changeActive = (active) => {}
+    const active = computed(() => props.activeTabBar)
 
     return {
-      changeActive
+      active
     }
   }
 }

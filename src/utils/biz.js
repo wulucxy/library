@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js';
 import * as dd from "dingtalk-jsapi"; // 钉钉JSAPI
 
+import store from '@/store';
 import axios from './request';
 import { requestAuthCodeForRuntime, ddConfig } from './ddApi'
 import { setAuthCode, delAuthCode, setToken, clearStorage } from './tools'
@@ -18,6 +19,7 @@ async function getTokenService(settings) {
   .then(function(res) {
     // 写入本地存储
     // todo: 更新 token
+    console.log('store', store)
     setToken(res.access_token)
     return res.access_token;
   });

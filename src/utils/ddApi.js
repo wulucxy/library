@@ -133,3 +133,10 @@ export function downloadFile (config) {
 export function departmentsPicker (config) {
   return dd.biz.contact.departmentsPicker({ ...baseConfig(), ...config })
 }
+
+// 返回上一页
+export function goBack (config) {
+  return dd.biz.navigation.goBack(config)
+}
+
+
