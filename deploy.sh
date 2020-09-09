@@ -21,7 +21,7 @@ clean() {
 # 初始化启动
 install() {
   # 安装依赖
-  cnpm install
+  yarn
 }
 
 build() {
