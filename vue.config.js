@@ -33,8 +33,10 @@ module.exports = {
         enable: true
       })
     ]
-    if (process.env.NODE_ENV === 'development') {
-      config.plugins = [...config.plugins, ...devPlugins];
-    }
+    // todo: 生产环境优化
+    config.plugins = [...config.plugins, ...devPlugins];
+    // if (process.env.NODE_ENV === 'development') {
+    //   config.plugins = [...config.plugins, ...devPlugins];
+    // }
   }
 }

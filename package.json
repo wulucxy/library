@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "serve:prod": "node server/index.js"
   },
   "dependencies": {
     "axios": "^0.20.0",
@@ -14,6 +15,7 @@
     "dingtalk-jsapi": "^2.12.2",
     "koa": "^2.13.0",
     "koa-mount": "^4.0.0",
+    "koa-proxies": "^0.11.0",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.20",
     "qs": "^6.9.4",
