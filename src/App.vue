@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    {{ storeState }}
     <Skeleton title :row="6" />
     <router-view class="child-view"></router-view>
     <TabBar
@@ -16,7 +17,7 @@ import { Skeleton } from 'vant';
 import { useStore } from "vuex";
 
 import { TabBar } from '@/components'
-import { ddAuth, utilScan, setMenu } from '@/utils'
+import { ddAuth, utilScan, setMenu, axios } from '@/utils'
 
 import './assets/style/index.less'
 
@@ -40,14 +41,15 @@ export default {
     })
 
     const activeTabBar = computed(() => store.state.tabBarActive)
+    const storeState = computed(() => store.state)
 
     const changeActive = (active) => {
-      console.log('active', active)
       store.dispatch('setTabBar', active)
     }
 
     onMounted(async () => {
       const result = await ddAuth()
+      axios.get('/api/users/current')
       setMenu({
         backgroundColor: "#ADD8E6",
         textColor: "#ADD8E611",
@@ -78,6 +80,7 @@ export default {
 
     return {
       state,
+      storeState,
       tabBarData,
       activeTabBar,
       changeActive,

@@ -20,6 +20,14 @@ app.use(proxy('/dd', {
   logs: true
 }))
 
+// todo: 指向到真实环境
+app.use(proxy('/api', {
+  target: 'http://10.252.2.38:7080',
+  changeOrigin: true,
+  rewrite: path => path.replace(/^\/api/, ''),
+  logs: true
+}))
+
 app.use(mount('/static', serve(path.join(__dirname, '../dist/static'))));
 
 app.use(async (ctx) => {

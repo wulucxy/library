@@ -24,6 +24,15 @@ module.exports = {
           '^/dd': ''
         }
       },
+      '/api': {
+        ws: false,
+        target: process.env.VUE_APP_BASE_API,
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      },
     }
   },
   configureWebpack: config => {

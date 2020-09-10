@@ -2,8 +2,8 @@ import axios from 'axios';
 import qs from 'qs';
 // import url from 'url'
 
-import { addSearchParam } from './base'
-import { getToken, getAuthCode } from './tools'
+import { addSearchParam } from './base';
+import store from '@/store';
 
 // 抛出 http 异常
 export const HttpError = (message, code) => {
@@ -18,7 +18,6 @@ export const HttpError = (message, code) => {
 // 创建axios实例
 const service = axios.create({
   // baseURL 在request拦截器中指定
-  // baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
   timeout: 1200000, // 请求超时时间
   withCredentials: true,
   // 格式化 query 中数组格式
@@ -30,16 +29,17 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
+    const { token, authCode } = store.state || {}
     // todo: 后端接口地址(非钉钉服务)
     if (/^(\/)?api/.test(config.url)) {
-      config.baseURL = process.env.VUE_APP_BASE_API;
-      if (getToken() && getAuthCode()) {
-        console.log('config.headers', config.headers)
-        config.headers.Authorization = getToken();
+      // config.baseURL = process.env.VUE_APP_BASE_API;
+      if (token && authCode) {
+        config.headers['token'] = token
+        config.headers['code'] = authCode
       }
     } else if(/^(\/)?dd/.test(config.url)) {
       // 钉钉接口
-      const parsed = addSearchParam(config.url, 'access_token', getToken())
+      const parsed = addSearchParam(config.url, 'access_token', token)
       config.url = parsed
     }
     config.headers['Content-Type'] = 'application/json';

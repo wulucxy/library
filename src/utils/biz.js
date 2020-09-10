@@ -4,7 +4,6 @@ import * as dd from "dingtalk-jsapi"; // 钉钉JSAPI
 import store from '@/store';
 import axios from './request';
 import { requestAuthCodeForRuntime, ddConfig } from './ddApi'
-import { setAuthCode, delAuthCode, setToken, clearStorage } from './tools'
 
 const Settings = require('./const')
 
@@ -18,9 +17,7 @@ async function getTokenService(settings) {
   return await axios.get('/dd/gettoken', { params })
   .then(function(res) {
     // 写入本地存储
-    // todo: 更新 token
-    console.log('store', store)
-    setToken(res.access_token)
+    store.dispatch('setToken', res.access_token)
     return res.access_token;
   });
 }
@@ -58,16 +55,14 @@ const ddAuth = () => {
         })
 
         dd.ready(() => {
-          console.log('dd.reandy')
           requestAuthCodeForRuntime({
             onSuccess: ({ code }) => {
-              console.log('onSuccess', code)
-              setAuthCode(code)
+              store.dispatch('setAuthCode', code)
               resolve(code)
             },
             onFail: function(err) {
               console.error('err', err)
-              delAuthCode()
+              store.dispatch('delAuthCode')
               reject(err)
             }
           })
@@ -75,7 +70,7 @@ const ddAuth = () => {
 
         dd.error(function(err) {
           // 清除所有缓存
-          clearStorage()
+          store.dispatch('clearStorage')
           console.error('error', err);
         });
       })
