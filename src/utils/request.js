@@ -2,8 +2,9 @@ import axios from 'axios';
 import qs from 'qs';
 // import url from 'url'
 
-import { addSearchParam } from './base';
+import { addSearchParam, isApi, isDingding } from './base';
 import store from '@/store';
+import { requestAuthCode } from './ddApi'
 
 // 抛出 http 异常
 export const HttpError = (message, code) => {
@@ -28,11 +29,11 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(
-  config => {
-    const { token, authCode } = store.state || {}
+  async config => {
+    const { token } = store.state || {}
+     const authCode = await requestAuthCode()
     // todo: 后端接口地址(非钉钉服务)
     if (/^(\/)?api/.test(config.url)) {
-      // config.baseURL = process.env.VUE_APP_BASE_API;
       if (token && authCode) {
         config.headers['token'] = token
         config.headers['code'] = authCode
@@ -56,9 +57,18 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data;
-    if (res.errcode !== 0) {
-      return HttpError(res.msg || '请求异常', res.errcode);
+    
+    // 内部接口
+    if(isApi(response.config.url)) {
+      if (res.code !== 200) {
+        return HttpError(res.msg || '请求异常', res.code);
+      }
+    } else if (isDingding(response.config.url)) {
+      if (res.errcode !== 0) {
+        return HttpError(res.errmsg || '请求异常', res.errcode);
+      }
     }
+
     return res;
   },
   error => {

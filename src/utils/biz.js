@@ -3,7 +3,7 @@ import * as dd from "dingtalk-jsapi"; // 钉钉JSAPI
 
 import store from '@/store';
 import axios from './request';
-import { requestAuthCodeForRuntime, ddConfig } from './ddApi'
+import { ddConfig } from './ddApi'
 
 const Settings = require('./const')
 
@@ -55,23 +55,14 @@ const ddAuth = () => {
         })
 
         dd.ready(() => {
-          requestAuthCodeForRuntime({
-            onSuccess: ({ code }) => {
-              store.dispatch('setAuthCode', code)
-              resolve(code)
-            },
-            onFail: function(err) {
-              console.error('err', err)
-              store.dispatch('delAuthCode')
-              reject(err)
-            }
-          })
+          resolve(true)
         })
 
         dd.error(function(err) {
           // 清除所有缓存
           store.dispatch('clearStorage')
           console.error('error', err);
+          reject(err)
         });
       })
     })

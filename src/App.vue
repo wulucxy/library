@@ -48,8 +48,10 @@ export default {
     }
 
     onMounted(async () => {
-      const result = await ddAuth()
-      axios.get('/api/users/current')
+      await ddAuth()
+      axios.get('/api/users/current').then(res => {
+        console.log('res', res)
+      })
       setMenu({
         backgroundColor: "#ADD8E6",
         textColor: "#ADD8E611",

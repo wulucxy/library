@@ -1,5 +1,7 @@
 import * as dd from 'dingtalk-jsapi'
 
+import store from '@/store';
+
 const Settings = require('./const')
 
 const baseConfig = () => ({
@@ -16,6 +18,25 @@ export function alert(config) {
  */
 export function requestAuthCodeForRuntime (config) {
   return dd.runtime.permission.requestAuthCode({ ...baseConfig(), ...config })
+}
+
+/**
+ * 每次动态生成 authCode
+ */
+export const requestAuthCode = () => {
+  return new Promise((resolve, reject) => {
+    requestAuthCodeForRuntime({
+      onSuccess: ({ code }) => {
+        store.dispatch('setAuthCode', code)
+        resolve(code)
+      },
+      onFail: function(err) {
+        console.error('err', err)
+        store.dispatch('delAuthCode')
+        reject(err)
+      }
+    })
+  })
 }
 
 // 打开一个新的h5页面
