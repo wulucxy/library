@@ -22,7 +22,8 @@ app.use(proxy('/dd', {
 
 // todo: 指向到真实环境
 app.use(proxy('/api', {
-  target: 'http://10.252.2.38:7080',
+  // target: 'http://10.252.2.38:7080',
+  target: 'http://10.5.29.82:7080',
   changeOrigin: true,
   rewrite: path => path.replace(/^\/api/, ''),
   logs: true
