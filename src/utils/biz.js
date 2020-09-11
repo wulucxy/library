@@ -5,7 +5,7 @@ import store from '@/store';
 import axios from './request';
 import { ddConfig } from './ddApi'
 
-const Settings = require('./const')
+const Settings = require('./settings')
 
 // 获取 access_token
 async function getTokenService(settings) {
@@ -55,7 +55,9 @@ const ddAuth = () => {
         })
 
         dd.ready(() => {
-          resolve(true)
+          axios.get('/api/users/current').then(res => {
+            resolve(res.data)
+          })
         })
 
         dd.error(function(err) {

@@ -1,12 +1,13 @@
 <template>
-  <div id="app">
-    {{ storeState }}
-    <Skeleton title :row="6" />
+  <div>
+    <!-- <div v-if="!storeState.userInfo" :style="{marginTop: '16px' }">
+      <Skeleton title :row="6" />
+    </div> -->
     <router-view class="child-view"></router-view>
     <TabBar
+      v-if="showTabBar"
       :data="tabBarData"
-      :activeTabBar="activeTabBar"
-      :changeActive="changeActive"
+      :activeRoute="activeRoute"
     />
   </div>
 </template>
@@ -15,14 +16,15 @@
 import { onMounted, reactive, computed } from 'vue'
 import { Skeleton } from 'vant';
 import { useStore } from "vuex";
+import { useRoute } from 'vue-router'
 
 import { TabBar } from '@/components'
-import { ddAuth, utilScan, setMenu, axios } from '@/utils'
+import { ddAuth, utilScan, setMenu } from '@/utils'
 
-import './assets/style/index.less'
+import './assets/style/index.scss'
 
  const tabBarData = [
-  {label: '购书申请', name: 'cart', icon: 'shopping-cart', path: '/apply'},
+  {label: '购书申请', name: 'apply', icon: 'shopping-cart', path: '/apply'},
   {label: '首页', name: 'home', icon: 'wap-home', path: '/'},
   {label: '我', name: 'me', icon: 'manager', path: '/me'}
 ];
@@ -40,18 +42,16 @@ export default {
       userInfo: null
     })
 
-    const activeTabBar = computed(() => store.state.tabBarActive)
     const storeState = computed(() => store.state)
-
-    const changeActive = (active) => {
-      store.dispatch('setTabBar', active)
-    }
+    // 当前路由
+    const activeRoute = computed(() => store.state.activeRoute)
+    // 是否展示 tabBar
+    const showTabBar = computed(() => !!store.state.activeRoute?.meta?.showTabBar)
 
     onMounted(async () => {
-      await ddAuth()
-      axios.get('/api/users/current').then(res => {
-        console.log('res', res)
-      })
+      const userInfo = await ddAuth()
+      store.dispatch('setUserInfo', userInfo)
+
       setMenu({
         backgroundColor: "#ADD8E6",
         textColor: "#ADD8E611",
@@ -84,19 +84,23 @@ export default {
       state,
       storeState,
       tabBarData,
-      activeTabBar,
-      changeActive,
+      activeRoute,
+      showTabBar,
     }
   }
 }
 </script>
 
 <style>
+body{
+  user-select:none; 
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "SF Pro SC","SF Pro Text","SF Pro Icons","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
+  font-style: normal;
+  letter-spacing: 0em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

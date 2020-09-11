@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page me-page">
     <div class="search-result">
       我的页面
     </div>

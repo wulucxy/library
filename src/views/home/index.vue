@@ -1,14 +1,16 @@
 <template>
-  <div>
+  <div class="page home-page">
     <div class="search-field">
       <CellGroup>
         <Search
-          v-model="state.searchTxt"
           input-align="center"
-          @search="onSearch"
+          @focus="onFocus"
           placeholder="搜索图书关键字"
         />
       </CellGroup>
+    </div>
+    <div class='card-large'>
+      <Button type='primary' size="large" class='primary-btn primary-btn-shadow btn-1'>轻&nbsp;松&nbsp;借&nbsp;阅&nbsp;扫&nbsp;码&nbsp;自&nbsp;助</Button>
     </div>
     <div>
       <Tabs v-model="state.activeTab" @change="handleTabChange" class="inline-tabs">
@@ -19,30 +21,40 @@
   </div>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { CellGroup, Search, Tabs, Tab } from 'vant'
+import { CellGroup, Search, Tabs, Tab, Button } from 'vant'
+
+import { axios } from '@/utils'
+const CONST = require('@/utils/const')
 
 export default {
-  name: 'home',
+  name: 'Home',
   components: {
+    Button,
     CellGroup,
     Search,
     Tabs,
     Tab
   },
-  setup (props){
+  setup (){
     const router = useRouter()
 
     const state = reactive({
-      searchTxt: '',
-      activeTab: 'recommend'
+      activeTab: 'recommend',
+      recommend: {
+        loading: false,
+        finished: false,
+      },
+      rank: {
+        loading: false,
+        finished: false,
+      },
     })
 
-    const onSearch = (txt) => {
+    const onFocus = () => {
       router.push({
-        path: '/result',
-        query: { search: txt }
+        path: '/search',
       })
     }
 
@@ -50,9 +62,15 @@ export default {
       console.log('active', active)
     }
 
+    onMounted(() => {
+      axios.get('/api/recommend').then(res => {
+
+      })
+    })
+
     return {
       state,
-      onSearch,
+      onFocus,
       handleTabChange
     }
   }
@@ -60,3 +78,14 @@ export default {
 
 
 </script>
+<style scoped>
+  .card-large{
+    margin: 8px 0;
+    padding: 7.5% 11.3%;
+    background-color: #fff;
+  }
+  .btn-1{
+    height: 44px;
+    border-radius: 22px;
+  }
+</style>

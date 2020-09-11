@@ -1,8 +1,7 @@
 <template>
   <Tabbar
-    v-model="active"
+    v-model="state.active"
     :active-color="tabBarActiveColor"
-    @change="changeActive"
   >
     <TabbarItem 
       v-for="(item,index) of data"
@@ -17,7 +16,7 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { reactive } from 'vue'
 import { Tabbar, TabbarItem } from 'vant';
 
 export default {
@@ -31,18 +30,26 @@ export default {
       type: Array,
       default: () => []
     },
-    activeTabBar: String,
-    changeActive: Function,
+    activeRoute: {
+      type: Object,
+      default: () => ({})
+    },
+    handleChange: Function,
     tabBarActiveColor: {
       type: String,
-      default: '#e43130'
+      default: '#FFD27E'
     }  
   },
   setup(props) {
-    const active = computed(() => props.activeTabBar)
+    // eslint-disable-next-line
+    const { handleChange } = props
+    const activeTabName = (props.data.find(d => d.path === props.activeRoute.path) || {}).name
+    const state = reactive({
+      active: activeTabName
+    })
 
     return {
-      active
+      state,
     }
   }
 }

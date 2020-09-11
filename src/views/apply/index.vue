@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page apply-page">
     <Form class="apply-form">
       <CellGroup title="购书申请">
         <Form>

@@ -2,7 +2,7 @@ import * as dd from 'dingtalk-jsapi'
 
 import store from '@/store';
 
-const Settings = require('./const')
+const Settings = require('./settings')
 
 const baseConfig = () => ({
   corpId: Settings.corpId,

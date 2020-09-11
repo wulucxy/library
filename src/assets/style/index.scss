@@ -1,0 +1,133 @@
+@import '~normalize.css/normalize.css';
+@import './variable.scss';
+@import './mixin.scss';
+@import './function.scss';
+
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+a, div, header, span{
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+
+html {
+  font-size: ($vw_fontsize / ($vw_design / 2)) * 100vw; 
+  // 同时，通过Media Queries 限制根元素最大最小值
+  @media screen and (max-width: 320px) {
+    font-size: 64px;
+  }
+  @media screen and (min-width: 540px) {
+    font-size: 108px;
+  }
+}
+
+// body 也增加最大最小宽度限制，避免默认100%宽度的 block 元素跟随 body 而过大过小
+body {
+  max-width: 540px;
+  min-width: 320px;
+  font-size: 14px;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, p, span{
+  margin: 0;
+}
+
+h3{
+  font-size: rem(16);
+}
+
+.page{
+  background-color: #fff;
+  &.home-page{
+    background-color: #F2F2F2;
+  }
+}
+
+.dib{
+  display: inline-block;
+}
+
+.f16{
+  font-size: 16px;
+}
+
+.flex{
+  display: flex;
+}
+
+.inline-flex{
+  display: inline-flex;
+}
+
+.f1{
+  flex: 1;
+}
+
+.flex-column{
+  flex-direction: column;
+}
+
+.ellipsis{
+  @include ellipsis;
+}
+
+.ml-10{
+  margin-left: 10px;
+}
+
+.ml-6{
+  margin-left: 6px;
+}
+
+.vm{
+  vertical-align: middle;
+}
+
+.tc{
+  text-align: center;
+}
+
+.ovh{
+  overflow: hidden;
+}
+
+.primary-btn{
+  background-color: $primaryColor;
+  border-color: $primaryColor;
+}
+
+.van-tabs__line{
+  background-color: $primaryColor;
+}
+
+.primary-btn-shadow{
+  box-shadow: 0px 1px 5px 2px rgba(254, 195, 45, 0.20);
+}
+
+.form-footer{
+  padding: 10px 16px;
+  text-align: center;
+  & > button + button{
+    margin-bottom: 0;
+    margin-left: 10px;
+  }
+}
+
+.inline-tabs{
+  .van-tabs__nav{
+    display: block;
+    padding-left: 8px;
+    padding-right: 12px;
+    .van-tab{
+      flex: none;
+      float: left;
+      line-height: 44px;
+      &:nth-child(2){
+        margin-left: 12px;
+      }
+    }
+  }
+}
+

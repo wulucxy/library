@@ -1,0 +1,8 @@
+@import './variable.scss';
+
+@function rem($px) {
+  @return ($px / $vw_fontsize) * 1rem;
+}
+@function test() {
+  @return 100px;
+}

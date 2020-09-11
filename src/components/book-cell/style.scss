@@ -1,0 +1,40 @@
+@import '@/assets/style/function';
+
+.book-cell{
+  margin-bottom: rem(20);
+  padding: rem(12) rem(28);
+  color: #464646;
+  &.cell_clickable{
+    &:active{
+      background-color: #f2f3f5;
+    }
+  }
+  .media-body{
+    margin-left: rem(16);
+    align-items: stretch;
+  }
+  .media-content{
+    flex-grow: 1;
+  }
+  .media-footer{
+    flex-shrink: 0;
+    .fav{
+      padding: rem(6) 0;
+    }
+  }
+  h4{
+    margin-top: 0;
+    margin-bottom: rem(8);
+    line-height: rem(20);
+    font-size: rem(14);
+  }
+  .author{
+    font-size: rem(14);
+    margin-bottom: rem(8);
+  }
+  .media-txt{
+    font-size: rem(12);
+    margin-bottom: rem(10);
+
+  }
+}

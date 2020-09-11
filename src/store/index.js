@@ -5,13 +5,18 @@ const initialState = {
   token: null,
   authCode: null,
   userInfo: null,
+  activeRoute: {}, // 当前选中路由
 }
 
 const mutations = {
-  // 获取登陆状态
-  // setLoginType (state, type) {
-  //   state.loginType = type
-  // },
+  // 获取登录用户状态
+  SET_USER_INFO (state, userInfo) {
+    state.userInfo = userInfo
+  },
+  // 设置路由
+  SET_ROUTE (state, route) {
+    state.activeRoute = route
+  },
   // 设置 token
   SET_TOKEN: (state, token) => {
     state.token = token
@@ -24,9 +29,6 @@ const mutations = {
   },
   DEL_AUTH_CODE: (state) => {
     state.authCode = null
-  },
-  SET_TABBAR: (state, active) => {
-    state.tabBarActive = active
   },
   CLEAR_STORAGE: (state) => {
     Object.assign(state, {
@@ -41,6 +43,9 @@ const actions = {
   setTabBar({ commit }, active) {
     commit('SET_TABBAR', active)
   },
+  setRoute( { commit }, route) {
+    commit('SET_ROUTE',route)
+  },
   setToken({ commit }, token) {
     commit('SET_TOKEN', token)
   },
@@ -52,6 +57,9 @@ const actions = {
   },
   delAuthCode({ commit }) {
     commit('DEL_AUTH_CODE')
+  },
+  setUserInfo({ commit }, info) {
+    commit('SET_USER_INFO', info)
   },
   clearStorage({ commit }) {
     commit('CLEAR_STORAGE')

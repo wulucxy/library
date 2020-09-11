@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store'
 import { setTitle } from '../utils'
 import Home from '../views/home'
+import Me from '../views/me'
+import Apply from '../views/apply'
 
-const Settings = require('../utils/const')
+const CONST = require('../utils/const')
 
 const routerHistory = createWebHistory()
 
@@ -11,30 +14,37 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      meta: { showTabBar: true },
       component: Home
     },
     {
-      path: '/result',
-      meta: { title: '搜索结果页' },
-      component: () => import('@/views/result')
+      path: '/search',
+      meta: { title: '搜索',  showTabBar: false },
+      component: () => import('@/views/search')
+    },
+    {
+      path: '/detail',
+      meta: { title: '图书详情页',  showTabBar: false },
+      component: () => import('@/views/detail')
     },
     {
       path: '/apply',
-      meta: { title: '购书申请' },
-      component: () => import('@/views/apply')
+      meta: { title: '购书申请',  showTabBar: true },
+      component: Apply
     },
     {
       path: '/me',
-      meta: { title: '我的' },
-      component: () => import('@/views/me')
+      meta: { title: '我的', showTabBar: true },
+      component: Me
     },
   ]
 })
 
 router.beforeEach((to, from, next) => {
   setTitle({
-    title: to.meta.title ? to.meta.title : Settings.title,
+    title: to.meta.title ? to.meta.title : CONST.title,
   })
+  store.dispatch('setRoute', to)
   next();
 })
 

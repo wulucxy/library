@@ -8,6 +8,8 @@ export const addSearchParam = function(link, param, value) {
   return url.format(a)
 }
 
+export const noop = () => {}
+
 // 内部接口
 export const isApi = url => /^\/api/.test(url)
 
