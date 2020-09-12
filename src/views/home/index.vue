@@ -26,7 +26,6 @@ import { useRouter } from 'vue-router'
 import { CellGroup, Search, Tabs, Tab, Button } from 'vant'
 
 import { axios } from '@/utils'
-const CONST = require('@/utils/const')
 
 export default {
   name: 'Home',

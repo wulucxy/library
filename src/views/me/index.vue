@@ -1,35 +1,41 @@
 <template>
   <div class="page me-page">
-    <div class="search-result">
-      我的页面
+    <div class="me-result">
+      <Tabs v-model="state.activeTab" class="inline-tabs">
+        <Tab name='bollow' title="我的借阅">
+          <Bollow />
+        </Tab>
+        <Tab name='fav' title="我的收藏">2</Tab>
+      </Tabs>
     </div>
   </div>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { CellGroup, Search } from 'vant'
+import { Tabs, Tab } from 'vant'
+
+import { Bollow } from './components'
 
 export default {
   name: 'Me',
   components: {
-    CellGroup,
-    Search,
+    Bollow,
+    Tabs,
+    Tab,
   },
   setup (props){
-    const route = useRoute()
-    console.log('route', route.query)
     const state = reactive({
-      searchTxt: ''
+      activeTab: 'bollow',
+      bollowList: [],
     })
 
-    const onSearch = (txt) => {
-      console.log('txt', txt)
-    }
+    onMounted(() => {
+      // 查询借阅列表
+    })
 
     return {
       state,
-      onSearch
     }
   }
 }

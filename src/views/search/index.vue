@@ -13,19 +13,20 @@
     </div>
     <div class="search-result" :style="{paddingTop: '16px'}">
       <!-- todo: for dev -->
-      <BookCell
-        :clickable="true"
+      <BookInfoCell
         :handleClick="handleItemClick"
-      />
+      >
+      </BookInfoCell>
       <!-- 已查询，有查询结果 -->
       <div v-if="state.result && state.result.length > 0">
-        <BookCell
+        <BookInfoCell
           v-for="book in state.result"
           :key="book.id"
           :book="book"
           :clickable="true"
           :handleClick="handleItemClick"
-        />
+        >
+      </BookInfoCell>
       </div>
       <!-- 已查询，查询结果为空 -->
       <Empty
@@ -59,7 +60,7 @@ import { reactive, onMounted, ref } from 'vue'
 import { CellGroup, Search, Empty, Button, Icon } from 'vant'
 import { useRouter } from 'vue-router'
 
-import { BookCell } from '@/components'
+import { BookInfoCell } from '@/components'
 import { setSearchHistory, getSearchHistory, clearSearchHistory } from '@/utils/tools'
 
 export default {
@@ -70,7 +71,7 @@ export default {
     Empty,
     Button,
     Icon,
-    BookCell
+    BookInfoCell
   },
   setup (props){
     const searchRef = ref(null)

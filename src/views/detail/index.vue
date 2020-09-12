@@ -1,9 +1,9 @@
 <template>
   <div class='page detail-page'>
     <div class="book-detail">
-      <BookCell />
+      <BookInfoCell />
       <div class="book-content">
-        <TextCollapse title="图书简介">《中华人民共和国民法典》被称为“社会生活的百科全书”，是新中国第一部以法典命名的法律，在法律体系中居于基础性地位，etter-spacing: 0em;etter-spacing: 0em;
+        <TextCollapse title="图书简介">《中华人民共和国民法典》被称为“社会生活的百科全书”，是新中国第一部以法典命名的法律，在法律体系中居于基础性地位，etter-spacing: 0em;etter-spacing: 0em;dddd
         </TextCollapse>
       </div>
     </div>
@@ -18,7 +18,7 @@ import { reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { CellGroup, Button } from 'vant'
 
-import { BookCell, TextCollapse } from '@/components'
+import { BookCell, BookInfoCell, TextCollapse } from '@/components'
 
 export default {
   name: 'Result',
@@ -26,6 +26,7 @@ export default {
     CellGroup,
     TextCollapse,
     BookCell,
+    BookInfoCell,
     Button,
   },
   setup (props){
