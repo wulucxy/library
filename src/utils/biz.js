@@ -63,7 +63,7 @@ const ddAuth = () => {
         dd.error(function(err) {
           // 清除所有缓存
           store.dispatch('clearStorage')
-          console.error('error', err);
+          console.error('===dd.error===', err);
           reject(err)
         });
       })

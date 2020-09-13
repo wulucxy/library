@@ -14,7 +14,14 @@
     </div>
     <div>
       <Tabs v-model="state.activeTab" @change="handleTabChange" class="inline-tabs">
-        <Tab name='recommend' title="新书推荐">1</Tab>
+        <Tab name='recommend' title="新书推荐">
+          <Recommend
+            :data="state.recommend.data"
+            :loading="state.recommend.loading"
+            :finished="state.recommend.finished"
+            :updateBook="updateBook"
+          />
+        </Tab>
         <Tab name='rank' title="借阅排行">2</Tab>
       </Tabs>
     </div>
@@ -25,7 +32,9 @@ import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { CellGroup, Search, Tabs, Tab, Button } from 'vant'
 
+import { Recommend } from './components'
 import { axios } from '@/utils'
+import CONST from '@/utils/const'
 
 export default {
   name: 'Home',
@@ -34,7 +43,8 @@ export default {
     CellGroup,
     Search,
     Tabs,
-    Tab
+    Tab,
+    Recommend
   },
   setup (){
     const router = useRouter()
@@ -44,10 +54,16 @@ export default {
       recommend: {
         loading: false,
         finished: false,
+        data: {
+          records: []
+        },
       },
       rank: {
         loading: false,
         finished: false,
+        data: {
+          records: []
+        }
       },
     })
 
@@ -61,14 +77,52 @@ export default {
       console.log('active', active)
     }
 
-    onMounted(() => {
-      axios.get('/api/recommend').then(res => {
+    // 更新全部
+    const updateState = (type, obj) => {
+      const next = Object.assign({}, state[type], obj)
+      Object.assign(state, {
+        [type]: next
+      })
+    }
 
+    // 更新指定图书状态
+    const updateBook = (book, params) => {
+      const curTab = state[state.activeTab]
+      const curBook = curTab.data.records.find(d => d.id === book.id)
+      if(curBook) {
+        const nextTab = {
+          ...curTab,
+          data: {
+            ...curTab.data,
+            records: curTab.data.records.map(d => {
+              if(d.id === book.id) {
+                return {...d, ...params}
+              }
+              return d
+            })
+          }
+        }
+        updateState(state.activeTab, nextTab)
+      }
+    }
+
+    onMounted(() => {
+      updateState('recommend', {
+        loading: true,
+      })
+      axios.get('/api/books/new').then(res => {
+        updateState('recommend', {
+          loading: false,
+          finished: res.pages < CONST.pageSize,
+          data: res
+        })
       })
     })
 
     return {
       state,
+      updateState,
+      updateBook,
       onFocus,
       handleTabChange
     }

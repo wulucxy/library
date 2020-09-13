@@ -1,4 +1,5 @@
 const path = require('path')
+const Promise = require('bluebird')
 const vConsolePlugin = require('vconsole-webpack-plugin');
 
 module.exports = {
@@ -34,6 +35,49 @@ module.exports = {
           '^/api': ''
         }
       },
+    },
+    before (app){
+      function requireUncached(module) {
+        try {
+          // 删除缓存，动态加载
+          delete require.cache[require.resolve(module)]
+          return require(module)
+        } catch (e) {
+          console.log(`can't load module in ${module}`)
+        }
+      }
+
+      // 根据 mock 请求发送响应
+      function sendValue(req, res, value) {
+        if (typeof value === 'function') {
+          value = value(req, res)
+        }
+
+        if (value.$$header) {
+          Object.keys(value.$$header).forEach(key => {
+            res.setHeader(key, value.$$header[key])
+          })
+        }
+
+        const delay = value.$$delay || 0
+
+        delete value.$$header
+        delete value.$$delay
+
+        Promise.delay(delay, value).then(result => {
+          res.send(result)
+        })
+      }
+
+      app.all('/mock/*', function(req, res) {
+        const mockPath = path.join(__dirname, req.path)
+        const value = requireUncached(mockPath)
+        if (value) {
+          sendValue(req, res, value)
+        } else {
+          res.sendStatus(404)
+        }
+      })
     }
   },
   configureWebpack: config => {

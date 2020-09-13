@@ -31,7 +31,6 @@ export const requestAuthCode = () => {
         resolve(code)
       },
       onFail: function(err) {
-        console.error('err', err)
         store.dispatch('delAuthCode')
         reject(err)
       }

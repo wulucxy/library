@@ -6,6 +6,9 @@ import { addSearchParam, isApi, isDingding } from './base';
 import store from '@/store';
 import { requestAuthCode } from './ddApi'
 
+// 本地开发联调
+const isMock = process.env.NODE_ENV === 'development' && process.env.VUE_APP_MOCK === 'true'
+
 // 抛出 http 异常
 export const HttpError = (message, code) => {
   const error = new Error(message);
@@ -18,7 +21,6 @@ export const HttpError = (message, code) => {
 };
 // 创建axios实例
 const service = axios.create({
-  // baseURL 在request拦截器中指定
   timeout: 1200000, // 请求超时时间
   withCredentials: true,
   // 格式化 query 中数组格式
@@ -31,13 +33,22 @@ const service = axios.create({
 service.interceptors.request.use(
   async config => {
     const { token } = store.state || {}
-     const authCode = await requestAuthCode()
     // todo: 后端接口地址(非钉钉服务)
     if (/^(\/)?api/.test(config.url)) {
-      if (token && authCode) {
-        config.headers['token'] = token
-        config.headers['code'] = authCode
+      // 只给内部接口配置请求路径
+      config.baseURL = isMock ? process.env.VUE_APP_BASE_API : '/';
+      try {
+        // todo: 本地测试
+        // const authCode = await requestAuthCode()
+        // if (token && authCode) {
+        //   config.headers['token'] = token
+        //   config.headers['code'] = authCode
+        // }
+      } catch(err) {
+        console.log('===catch err', err)
+        // do nothing
       }
+      
     } else if(/^(\/)?dd/.test(config.url)) {
       // 钉钉接口
       const parsed = addSearchParam(config.url, 'access_token', token)
@@ -57,7 +68,6 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data;
-    
     // 内部接口
     if(isApi(response.config.url)) {
       if (res.code !== 200) {
@@ -69,7 +79,7 @@ service.interceptors.response.use(
       }
     }
 
-    return res;
+    return res.data;
   },
   error => {
     if (error.response) {

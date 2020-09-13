@@ -4,6 +4,7 @@
   margin-bottom: rem(20);
   padding: rem(12) rem(28);
   color: #464646;
+  background-color: #fff;
   &.cell_clickable{
     &:active{
       background-color: #f2f3f5;
@@ -36,5 +37,11 @@
     font-size: rem(12);
     margin-bottom: rem(10);
 
+  }
+}
+
+.book-list{
+  .book-cell:last-of-type{
+    margin-bottom: 0;
   }
 }

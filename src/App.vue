@@ -16,10 +16,9 @@
 import { onMounted, reactive, computed } from 'vue'
 import { Skeleton } from 'vant';
 import { useStore } from "vuex";
-import { useRoute } from 'vue-router'
 
 import { TabBar } from '@/components'
-import { ddAuth, utilScan, setMenu } from '@/utils'
+import { ddAuth, utilScan, setMenu, axios } from '@/utils'
 
 import './assets/style/index.scss'
 
@@ -49,9 +48,13 @@ export default {
     const showTabBar = computed(() => !!store.state.activeRoute?.meta?.showTabBar)
 
     onMounted(async () => {
-      const userInfo = await ddAuth()
-      store.dispatch('setUserInfo', userInfo)
-
+      try {
+        const userInfo = await ddAuth()
+        store.dispatch('setUserInfo', userInfo)
+      } catch (err){
+        console.error('用户免登失败')
+      }
+            
       setMenu({
         backgroundColor: "#ADD8E6",
         textColor: "#ADD8E611",

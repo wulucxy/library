@@ -15,6 +15,11 @@
             placeholder="请输入作者"
             :rules="[{ required: true, message: '请输入作者' }]"
           />
+          <Field label="上传图片">
+            <template #input>
+              <Uploader />
+            </template>
+          </Field>
           <div class="form-footer">
             <Button>重&nbsp;&nbsp;置</Button>
             <Button type='primary'>提&nbsp;&nbsp;交</Button>
@@ -26,15 +31,17 @@
 </template>
 <script>
 import { reactive } from 'vue'
-import { Form, CellGroup, Field, Button } from 'vant'
+import { Form, CellGroup, Cell, Field, Button, Uploader } from 'vant'
 
 export default {
   name: 'Apply',
   components: {
     Form,
     CellGroup,
+    Cell,
     Field,
     Button,
+    Uploader
   },
   setup (){
     const state = reactive({

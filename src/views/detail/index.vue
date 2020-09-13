@@ -1,48 +1,83 @@
 <template>
   <div class='page detail-page'>
     <div class="book-detail">
-      <BookInfoCell />
-      <div class="book-content">
-        <TextCollapse title="图书简介">《中华人民共和国民法典》被称为“社会生活的百科全书”，是新中国第一部以法典命名的法律，在法律体系中居于基础性地位，etter-spacing: 0em;etter-spacing: 0em;dddd
-        </TextCollapse>
+      <div v-if="state.bookInfo">
+        <BookInfoCell
+          :clickable="false"
+          :book="state.bookInfo"
+          :handleFav="handleFav"
+        />
+        <div class="book-content">
+          <TextCollapse title="图书简介">{{state.bookInfo.intro}}</TextCollapse>
+        </div>
       </div>
+      <Skeleton v-else-if="state.loading" title :row="6" />
     </div>
-    <div class="action-bar">
-      <Button type='default'>收藏</Button>
+    <div class="action-bar" v-if="state.bookInfo">
+      <Button
+        type='default'
+        :class="state.bookInfo.isFav && 'btn-solid'"
+        @click="handleFav"
+      >{{ state.bookInfo.isFav ? '已收藏' : '收藏' }}</Button>
       <Button type='primary'>借书</Button>
     </div>
   </div>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { CellGroup, Button } from 'vant'
+import { Button, Skeleton } from 'vant'
 
-import { BookCell, BookInfoCell, TextCollapse } from '@/components'
+import { BookInfoCell, TextCollapse } from '@/components'
+import { queryBookInfo, favBook } from '@/api'
 
 export default {
   name: 'Result',
   components: {
-    CellGroup,
+    Skeleton,
     TextCollapse,
-    BookCell,
     BookInfoCell,
     Button,
   },
   setup (props){
     const route = useRoute()
-    console.log('route', route.query)
+
+    const bookId = Number(route.query.id)
+
     const state = reactive({
-      searchTxt: ''
+      loading: false,
+      book: null
     })
 
-    const onSearch = (txt) => {
-      console.log('txt', txt)
+    onMounted(async () => {
+      Object.assign(state, {
+        loading: true
+      })
+      try {
+        const bookInfo = await queryBookInfo(route.query.id)
+        Object.assign(state, {
+          loading: false,
+          bookInfo,
+        })
+      } catch(err) {
+        Object.assign(state, {
+          loading: false
+        })
+      }
+    })
+
+    const handleFav = () => {
+      const nextBookInfo = {...state.bookInfo, isFav: !state.bookInfo.isFav}
+      Object.assign(state, {
+        bookInfo: nextBookInfo
+      })
+      // 同步保存后台
+      favBook(bookId, nextBookInfo.isFav)
     }
 
     return {
       state,
-      onSearch
+      handleFav
     }
   }
 }

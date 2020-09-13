@@ -98,6 +98,14 @@ h3{
   border-color: $primaryColor;
 }
 
+.van-icon.active{
+  color: $primaryColor;
+}
+
+.van-button--default.btn-solid{
+  background-color: $lightDark;
+}
+
 .van-tabs__line{
   background-color: $primaryColor;
 }

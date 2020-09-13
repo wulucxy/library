@@ -2,16 +2,22 @@
   <BookCell
     :clickable="true"
     :handleClick="handleItemClick"
+    :handleFav="handleFav"
+    :book="book"
   >
     <template v-slot:desc="slotProps">
-      <h4 class='ellipsis'>中华人民共和国民法的典历史</h4>
-      <div class='author'>作者 &nbsp; 著</div>
-      <div class='media-txt'>2020年7月 &nbsp;法律出版色</div>
+      <h4 class='ellipsis'>{{ slotProps.book.name }}</h4>
+      <div class='author ellipsis'>{{ slotProps.book.author }}&nbsp;著</div>
+      <div class='media-txt ellipsis'>{{ slotProps.book.press }}</div>
     </template>
     <template v-slot:footer="slotProps">
       <div class='fav'>
-        <Icon name='like-o' :class="iconClass" />
-        <span class='ml-6 vm'>收藏</span>
+        <Icon
+          :name="slotProps.book.isFav ? 'like' : 'like-o'"
+          class="vm f16"
+          :class="slotProps.book.isFav && 'active'"
+        />
+        <span class='ml-6 vm'>{{ slotProps.book.isFav ? '已收藏' : '收藏' }}</span>
       </div>
     </template>
   </BookCell>
@@ -25,22 +31,21 @@ export default {
   name: 'BookInfo',
   props: {
     handleItemClick: Function,
-    isLike: {
-     type: Boolean,
-     default: false,
-   }
+    handleFav: Function,
+    book: Object,
   },
   components: {
     BookCell,
     Icon
   },
   setup(props) {
+    const { updateState } = props
     const iconClass = cx('vm f16', {
-      active: !!props.isLike
+      active: !!props.book.isFav
     })
 
     return {
-      iconClass
+      iconClass,
     }
   }
 }

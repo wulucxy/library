@@ -12,25 +12,18 @@
       </CellGroup>
     </div>
     <div class="search-result" :style="{paddingTop: '16px'}">
-      <!-- todo: for dev -->
-      <BookInfoCell
-        :handleClick="handleItemClick"
-      >
-      </BookInfoCell>
       <!-- 已查询，有查询结果 -->
-      <div v-if="state.result && state.result.length > 0">
-        <BookInfoCell
-          v-for="book in state.result"
-          :key="book.id"
-          :book="book"
-          :clickable="true"
-          :handleClick="handleItemClick"
-        >
-      </BookInfoCell>
+      <div v-if="searchResult.records && searchResult.records.length > 0">
+        <List
+          :data="searchResult.records"
+          :loading="searchResult.loading"
+          :finished="searchResult.finished"
+          :updateBook="updateBook"
+        />
       </div>
       <!-- 已查询，查询结果为空 -->
       <Empty
-        v-else-if="state.result && state.result.length === 0"
+        v-else-if="searchResult.records && searchResult.records.length === 0"
         description='找不到搜索结果'
       />
       <!-- 未查询，且没有查询历史 -->
@@ -60,8 +53,10 @@ import { reactive, onMounted, ref } from 'vue'
 import { CellGroup, Search, Empty, Button, Icon } from 'vant'
 import { useRouter } from 'vue-router'
 
-import { BookInfoCell } from '@/components'
 import { setSearchHistory, getSearchHistory, clearSearchHistory } from '@/utils/tools'
+import { searchBook, favBook } from '@/api'
+import List from './components/list'
+import CONST from '@/utils/const'
 
 export default {
   name: 'SearchPage',
@@ -71,7 +66,7 @@ export default {
     Empty,
     Button,
     Icon,
-    BookInfoCell
+    List,
   },
   setup (props){
     const searchRef = ref(null)
@@ -81,24 +76,46 @@ export default {
     const state = reactive({
       searchTxt: '',
       searchHistory,
-      result: null
+    })
+
+    const searchResult = reactive({
+      loading: false,
+      finished: false,
+      records: null,
+      total: 0,
+      pages: 0,
+      current: 1
     })
 
     const focusInput = () => {
       searchRef.value.$el.querySelector('[type=search]').focus()
     }
 
-    const onSearch = (txt) => {
+    // 更新搜索历史记录
+    const setHistory = txt => {
       setSearchHistory(txt)
       const searchHistory = getSearchHistory()
       state.searchHistory = searchHistory
-      // todo: 查询列表
-      // 写入 state
     }
 
-    const updateBookStatus = (book) => {
-      // 1. 乐观更新state.result 列表
-      // 2. 写入数据库，如果报错，则重置
+    const handleSearch = (txt, options = {}) => {
+      if(typeof options.beforeCallback === 'function') {
+        options.beforeCallback(txt)
+      }
+      Object.assign(searchResult, {
+        loading: true
+      })
+      // 查询列表
+      searchBook({name: txt}).then(res => {
+        Object.assign(searchResult, res, {
+          loading: false,
+          finished: res.pages < CONST.pageSize,
+        })
+      })
+    }
+
+    const onSearch = (txt) => {
+      return handleSearch(txt, { beforeCallback: setHistory })
     }
 
     const handleDelete = () => {
@@ -110,12 +127,29 @@ export default {
     const handleHistoryItem = (item) => {
       state.searchTxt = item
       focusInput()
+      handleSearch(item)
     }
 
     const handleItemClick = (book, event) => {
       router.push({
         path: '/detail',
+        query: { id: book.id }
       })
+    }
+
+    // 收藏图书
+    const updateBook = (book) => {
+      const nextRecords = searchResult.records.map(d => {
+        if(d.id === book.id) {
+          return {...d, isFav: !book.isFav}
+        }
+        return d
+      })
+      Object.assign(searchResult, {
+        records: nextRecords
+      })
+      // 收藏图书
+      favBook(book.id, !book.isFav)
     }
 
     onMounted(() => {
@@ -124,15 +158,16 @@ export default {
 
     return {
       state,
+      searchResult,
       onSearch,
       searchHistory,
       handleDelete,
       handleItemClick,
+      updateBook,
       handleHistoryItem,
       searchRef
     }
   }
 }
-
 
 </script>
