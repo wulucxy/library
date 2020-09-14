@@ -1,7 +1,7 @@
 <template>
   <div>
     <Placeholder v-if="!state.userInfo" />
-    <div>
+    <div v-else>
       <router-view class="child-view"></router-view>
       <TabBar
         v-if="showTabBar"
