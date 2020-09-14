@@ -40,7 +40,6 @@ service.interceptors.request.use(
       try {
         // todo: 本地测试
         const authCode = await requestAuthCode()
-        console.log('====authCode===', authCode)
         if (token && authCode) {
           config.headers['token'] = token
           config.headers['code'] = authCode
@@ -55,7 +54,7 @@ service.interceptors.request.use(
       const parsed = addSearchParam(config.url, 'access_token', token)
       config.url = parsed
     }
-    console.log('====config===', config.headers)
+    console.log('===config.headers', config.headers)
     config.headers['Content-Type'] = 'application/json';
     return config;
   },
@@ -71,13 +70,14 @@ service.interceptors.response.use(
   response => {
     const res = response.data;
     // 内部接口
-    if(isApi(response.config.url)) {
-      if (res.code !== 200) {
-        return HttpError(res.msg || '请求异常', res.code);
-      }
-    } else if (isDingding(response.config.url)) {
+    if (isDingding(response.config.url)) {
       if (res.errcode !== 0) {
         return HttpError(res.errmsg || '请求异常', res.errcode);
+      }
+      return res
+    } else if(isApi(response.config.url)) {
+      if (res.code !== 200) {
+        return HttpError(res.msg || '请求异常', res.code);
       }
     }
 
