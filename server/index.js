@@ -25,7 +25,7 @@ app.use(proxy('/api', {
   // target: 'http://10.252.2.38:7080', // 测试环境
   target: 'http://10.5.29.82:7080', // 生产环境
   changeOrigin: true,
-  rewrite: path => path.replace(/^\/api/, ''),
+  rewrite: path => path.replace(/^\/api/, '/api'),
   logs: true
 }))
 
