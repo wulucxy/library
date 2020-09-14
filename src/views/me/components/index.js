@@ -1,1 +1,1 @@
-export { default as Bollow } from './bollow'
+export { default as BollowList } from './bollow'

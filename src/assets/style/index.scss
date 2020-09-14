@@ -2,6 +2,7 @@
 @import './variable.scss';
 @import './mixin.scss';
 @import './function.scss';
+@import './vant.scss';
 
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -30,12 +31,24 @@ body {
   margin: 0 auto;
 }
 
+body {
+  margin: 0;
+  color: #323233;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+  background-color: #f7f8fa;
+  -webkit-font-smoothing: antialiased;
+}
+
 h1, h2, h3, h4, h5, p, span{
   margin: 0;
 }
 
 h3{
   font-size: rem(16);
+}
+
+h4{
+  font-size: rem(14);
 }
 
 .page{
@@ -49,8 +62,17 @@ h3{
   display: inline-block;
 }
 
+
+.f12{
+  font-size: 12px;
+}
+
 .f16{
   font-size: 16px;
+}
+
+.pen{
+  pointer-events: none;
 }
 
 .flex{
@@ -69,6 +91,19 @@ h3{
   flex-direction: column;
 }
 
+.flex-between{
+  justify-content: space-between;
+}
+
+.flex-vertical-align{
+  align-items: center;
+}
+
+.flex-center{
+  align-items: center;
+  justify-content: center;
+}
+
 .ellipsis{
   @include ellipsis;
 }
@@ -79,6 +114,18 @@ h3{
 
 .ml-6{
   margin-left: 6px;
+}
+
+.mt-16{
+  margin-top: 16px;
+}
+
+.mt-10{
+  margin-top: 10px;
+}
+
+.mb-16{
+  margin-bottom: 16px;
 }
 
 .vm{
@@ -96,6 +143,10 @@ h3{
 .primary-btn{
   background-color: $primaryColor;
   border-color: $primaryColor;
+}
+
+.primary-txt{
+  color: #FF5724;
 }
 
 .van-icon.active{
@@ -119,7 +170,7 @@ h3{
   text-align: center;
   & > button + button{
     margin-bottom: 0;
-    margin-left: 10px;
+    margin-left: 16px;
   }
 }
 

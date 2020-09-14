@@ -24,7 +24,7 @@ const router = createRouter({
     },
     {
       path: '/detail',
-      meta: { title: '图书详情页',  showTabBar: false },
+      meta: { title: '图书详情',  showTabBar: false },
       component: () => import('@/views/detail')
     },
     {

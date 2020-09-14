@@ -40,7 +40,7 @@
               type='default'
               round
               @click="handleHistoryItem(item)"
-              :style="{margin: '0 6px 6px 0', minWidth: '48px'}"
+              :style="{margin: '0 6px 6px 0', minWidth: '48px', height: '32px' }"
             >{{ item }}</Button>
           </span>
         </div>
@@ -171,3 +171,8 @@ export default {
 }
 
 </script>
+<style lang="scss">
+  .search-page{
+    min-height: 100vh;
+  }
+</style>

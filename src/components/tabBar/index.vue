@@ -1,18 +1,21 @@
 <template>
-  <Tabbar
-    v-model="state.active"
-    :active-color="tabBarActiveColor"
-  >
-    <TabbarItem 
-      v-for="(item,index) of data"
-      :key="index"
-      :icon="item.icon"
-      :to="item.path"
-      :name="item.name"
+  <div>
+    <div style="height:50px; pointer-events: none;"></div>
+    <Tabbar
+      v-model="state.active"
+      :active-color="tabBarActiveColor"
     >
-      {{item.label}}
-    </TabbarItem>
-  </Tabbar>
+      <TabbarItem 
+        v-for="(item,index) of data"
+        :key="index"
+        :icon="item.icon"
+        :to="item.path"
+        :name="item.name"
+      >
+        {{item.label}}
+      </TabbarItem>
+    </Tabbar>
+  </div>
 </template>
 
 <script>

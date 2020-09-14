@@ -1,7 +1,7 @@
 @import '@/assets/style/function';
 
 .book-cell{
-  margin-bottom: rem(20);
+  margin-bottom: rem(8);
   padding: rem(12) rem(28);
   color: #464646;
   background-color: #fff;
@@ -16,6 +16,7 @@
   }
   .media-content{
     flex-grow: 1;
+    line-height: 1.5;
   }
   .media-footer{
     flex-shrink: 0;
@@ -31,11 +32,9 @@
   }
   .author{
     font-size: rem(14);
-    margin-bottom: rem(8);
   }
   .media-txt{
     font-size: rem(12);
-    margin-bottom: rem(10);
 
   }
 }

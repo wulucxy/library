@@ -38,11 +38,13 @@ service.interceptors.request.use(
       // 只给内部接口配置请求路径
       config.baseURL = isMock ? process.env.VUE_APP_BASE_API : '/';
       try {
-        // todo: 本地测试
-        const authCode = await requestAuthCode()
-        if (token && authCode) {
-          config.headers['token'] = token
-          config.headers['code'] = authCode
+        // mock 环境不走鉴权
+        if(!process.env.VUE_APP_MOCK) {
+          const authCode = await requestAuthCode()
+          if (token && authCode) {
+            config.headers['token'] = token
+            config.headers['code'] = authCode
+          }
         }
       } catch(err) {
         console.log('===catch err', err)

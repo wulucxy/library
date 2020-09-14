@@ -11,33 +11,45 @@
           <TextCollapse title="图书简介">{{state.bookInfo.intro}}</TextCollapse>
         </div>
       </div>
-      <Skeleton v-else-if="state.loading" title :row="6" />
+      <Placeholder v-else-if="state.loading" />
     </div>
-    <div class="action-bar" v-if="state.bookInfo">
-      <Button
-        type='default'
-        :class="state.bookInfo.isFav && 'btn-solid'"
-        @click="handleFav"
-      >{{ state.bookInfo.isFav ? '已收藏' : '收藏' }}</Button>
-      <Button type='primary'>借书</Button>
+    <div>
+    <div class="pen" style="height: 50px;"></div>
+      <div class="action-bar" v-if="state.bookInfo">
+        <Button
+          type='default'
+          :class="state.bookInfo.isFav && 'btn-solid'"
+          @click="handleFav"
+        >{{ state.bookInfo.isFav ? '已收藏' : '收藏' }}</Button>
+        <Button type='primary' @click="handleBorrow">借书</Button>
+      </div>
     </div>
+    <Bollow
+      :show="state.showBollowDialog"
+      :book="state.bookInfo"
+      :onCancel="handleCancel"
+      :onOk="handleConfirm"
+    />
   </div>
 </template>
 <script>
 import { reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Button, Skeleton } from 'vant'
+import { Button } from 'vant'
 
-import { BookInfoCell, TextCollapse } from '@/components'
-import { queryBookInfo, favBook } from '@/api'
+import { BookInfoCell, TextCollapse, Placeholder } from '@/components'
+import { queryBookInfo, favBook, bollowBook } from '@/api'
+
+import { Bollow } from './components'
 
 export default {
   name: 'Result',
   components: {
-    Skeleton,
+    Placeholder,
     TextCollapse,
     BookInfoCell,
     Button,
+    Bollow,
   },
   setup (props){
     const route = useRoute()
@@ -46,7 +58,8 @@ export default {
 
     const state = reactive({
       loading: false,
-      book: null
+      bookInfo: null,
+      showBollowDialog: false,
     })
 
     onMounted(async () => {
@@ -75,9 +88,37 @@ export default {
       favBook(bookId, nextBookInfo.isFav)
     }
 
+    const toggleDialog = () => {
+      Object.assign(state, {
+        showBollowDialog: !state.showBollowDialog
+      })
+    }
+
+    const handleCancel = () => {
+      toggleDialog()
+    }
+
+    const handleConfirm = (book) => {
+      bollowBook({
+        bookInstanceId: book.id
+      }).then(() => {
+        toggleDialog()
+      })
+      
+    }
+
+    // 借书
+    const handleBorrow = () => {
+      toggleDialog()
+    }
+
     return {
       state,
-      handleFav
+      handleFav,
+      handleBorrow,
+      handleCancel,
+      handleConfirm,
+      toggleDialog
     }
   }
 }
@@ -87,7 +128,7 @@ export default {
 <style lang="scss">
 @import '@/assets/style/function';
 .book-detail{
-  margin-top: rem(8);
+  min-height: 100vh;
 }
 .book-content{
   margin: 0 rem(28);
@@ -102,6 +143,7 @@ export default {
   align-items: center;
   justify-content: center;
   box-shadow: 0 -2px 8px #f0f1f2;
+  background-color: #fff;
   .van-button{
     display: inline-block;
     width: 33%;

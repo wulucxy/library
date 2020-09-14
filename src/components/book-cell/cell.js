@@ -31,7 +31,7 @@ const BookCell = (props, ctx) => {
           {ctx.slots.desc({ book: props.book })}
         </div>
         <div class='flex media-footer'>
-          {ctx.slots.footer({ book: props.book })}
+          {ctx.slots.footer && ctx.slots.footer({ book: props.book })}
         </div>
       </div>
     </section>

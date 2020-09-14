@@ -56,7 +56,7 @@ const ddAuth = () => {
 
         dd.ready(() => {
           axios.get('/api/users/current').then(res => {
-            resolve(res.data)
+            resolve(res)
           })
         })
 

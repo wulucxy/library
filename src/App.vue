@@ -1,24 +1,23 @@
 <template>
   <div>
-    <!-- <div v-if="!storeState.userInfo" :style="{marginTop: '16px' }">
-      <Skeleton title :row="6" />
-    </div> -->
-    <router-view class="child-view"></router-view>
-    <TabBar
-      v-if="showTabBar"
-      :data="tabBarData"
-      :activeRoute="activeRoute"
-    />
+    <Placeholder v-if="!state.userInfo" />
+    <div>
+      <router-view class="child-view"></router-view>
+      <TabBar
+        v-if="showTabBar"
+        :data="tabBarData"
+        :activeRoute="activeRoute"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { onMounted, reactive, computed } from 'vue'
-import { Skeleton } from 'vant';
 import { useStore } from "vuex";
 
-import { TabBar } from '@/components'
-import { ddAuth, utilScan, setMenu, axios } from '@/utils'
+import { TabBar, Placeholder } from '@/components'
+import { ddAuth, utilScan, setMenu } from '@/utils'
 
 import './assets/style/index.scss'
 
@@ -31,7 +30,7 @@ import './assets/style/index.scss'
 export default {
   name: 'App',
   components: {
-    Skeleton,
+    Placeholder,
     TabBar
   },
   setup() {
@@ -41,7 +40,6 @@ export default {
       userInfo: null
     })
 
-    const storeState = computed(() => store.state)
     // 当前路由
     const activeRoute = computed(() => store.state.activeRoute)
     // 是否展示 tabBar
@@ -51,8 +49,12 @@ export default {
       try {
         const userInfo = await ddAuth()
         store.dispatch('setUserInfo', userInfo)
+        Object.assign(state, {
+          userInfo
+        })
       } catch (err){
         console.error('用户免登失败')
+        throw(err)
       }
             
       setMenu({
@@ -85,7 +87,6 @@ export default {
 
     return {
       state,
-      storeState,
       tabBarData,
       activeRoute,
       showTabBar,

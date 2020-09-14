@@ -1,15 +1,14 @@
 <template>
-  <BookCell :clickable="true">
+  <BookCell :book="book" :clickable="true" class="flex-vertical-align">
     <template v-slot:desc="slotProps">
-      <h4 class='ellipsis'>中华人民共和国民法的典历史</h4>
-      {{ slotProps }}
-    </template>
-    <template v-slot:footer="slotProps">
-      {{ slotProps }}
+      <h4 class='ellipsis'>{{ slotProps.book.name }}</h4>
+      <div class='ellipsis'>借书日期：{{ formatDateTime(slotProps.book.borrowTime) }}</div>
+      <div class='ellipsis'>应还书日期：{{ formatDateTime(slotProps.book.borrowTime) }}</div>
     </template>
   </BookCell>
 </template>
 <script>
+  import { formatDateTime } from '@/utils'
   import { BookCell } from '@/components'
   export default {
     name: 'BollowItem',
@@ -22,8 +21,10 @@
         default: () => ({})
       }
     },
-    setup(props){
-
+    setup(){
+      return {
+        formatDateTime
+      }
     }
   }
 </script>

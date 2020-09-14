@@ -12,7 +12,7 @@
     <div class='card-large'>
       <Button type='primary' size="large" class='primary-btn primary-btn-shadow btn-1'>轻&nbsp;松&nbsp;借&nbsp;阅&nbsp;扫&nbsp;码&nbsp;自&nbsp;助</Button>
     </div>
-    <div>
+    <div class="cell-list-wrapper">
       <Tabs v-model="state.activeTab" @change="handleTabChange" class="inline-tabs">
         <Tab name='recommend' title="新书推荐">
           <Recommend
@@ -132,6 +132,9 @@ export default {
 
 </script>
 <style scoped>
+  .cell-list-wrapper{
+    background-color: #fff;
+  }
   .card-large{
     margin: 8px 0;
     padding: 7.5% 11.3%;

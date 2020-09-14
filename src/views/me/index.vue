@@ -3,35 +3,60 @@
     <div class="me-result">
       <Tabs v-model="state.activeTab" class="inline-tabs">
         <Tab name='bollow' title="我的借阅">
-          <Bollow />
+          <Placeholder v-if="state.loading" />
+          <BollowList v-else :books="state.bollowList" />
         </Tab>
-        <Tab name='fav' title="我的收藏">2</Tab>
+        <Tab name='fav' title="我的收藏">
+          <Placeholder v-if="state.loading" />
+          2
+        </Tab>
       </Tabs>
     </div>
   </div>
 </template>
 <script>
 import { reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
 import { Tabs, Tab } from 'vant'
+import Promise from 'bluebird'
 
-import { Bollow } from './components'
+import { queryBollowList, queryFavorList } from '@/api'
+import { Placeholder } from '@/components'
+import { BollowList } from './components'
+
 
 export default {
   name: 'Me',
   components: {
-    Bollow,
+    BollowList,
     Tabs,
     Tab,
+    Placeholder,
   },
   setup (props){
     const state = reactive({
       activeTab: 'bollow',
+      loading: false,
       bollowList: [],
+      favorlist: []
     })
 
     onMounted(() => {
-      // 查询借阅列表
+      Object.assign(state, {
+        loading: true
+      })
+      Promise.all(
+        [queryBollowList, queryFavorList].map(request => request()))
+      .then(res => {
+        Object.assign(state, {
+        bollowList: res[0],
+        favorlist: res[1],
+      })
+      })
+      .finally(() => {
+        Object.assign(state, {
+          loading: false
+        })
+      })
     })
 
     return {
@@ -39,6 +64,16 @@ export default {
     }
   }
 }
-
-
 </script>
+<style lang="scss">
+@import '@/assets/style/function';
+.me-page{
+  min-height: 100vh;
+}
+.me-result{
+  .book-cell{
+    margin-bottom: 0;
+    padding: rem(6) rem(28);
+  }
+}
+</style>

@@ -2,17 +2,14 @@ import { Empty } from 'vant'
 import BollowItem from './item'
 
 const Bollow = (props) => {
-  const { bookList } = props
-  return (
-    <BollowItem />
-  )
-  // if(bookList.length === 0)
-  //   return (
-  //     <Empty description="暂无借阅记录" />
-  //   )
+  const { books } = props
+  if(books.length === 0)
+    return (
+      <Empty description="暂无借阅记录" />
+    )
   return (
     <div>
-      { bookList.map(book => {
+      { books.map(book => {
         return (
           <div key={book.id}>
             <BollowItem book={book} />
@@ -24,7 +21,7 @@ const Bollow = (props) => {
 }
 
 Bollow.props = {
- bookList: {
+ books: {
    type: Array,
    default: () => ([])
  },

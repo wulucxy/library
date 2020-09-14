@@ -15,6 +15,7 @@
     "classnames": "^2.2.6",
     "core-js": "^3.6.5",
     "crypto-js": "^4.0.0",
+    "date-fns": "^2.16.1",
     "dingtalk-jsapi": "^2.12.2",
     "koa": "^2.13.0",
     "koa-mount": "^4.0.0",
