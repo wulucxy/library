@@ -40,6 +40,7 @@ service.interceptors.request.use(
       try {
         // todo: 本地测试
         const authCode = await requestAuthCode()
+        console.log('====authCode===', authCode)
         if (token && authCode) {
           config.headers['token'] = token
           config.headers['code'] = authCode
@@ -54,6 +55,7 @@ service.interceptors.request.use(
       const parsed = addSearchParam(config.url, 'access_token', token)
       config.url = parsed
     }
+    console.log('====config===', config.headers)
     config.headers['Content-Type'] = 'application/json';
     return config;
   },
