@@ -19,7 +19,7 @@ import { reactive, onMounted } from 'vue'
 import { Tabs, Tab } from 'vant'
 import Promise from 'bluebird'
 
-import { queryBorrowList, queryFavorList } from '@/api'
+import { queryBorrowList, queryFavorList, getUserInfo } from '@/api'
 import { Placeholder } from '@/components'
 import { BorrowList } from './components'
 
@@ -39,10 +39,13 @@ export default {
       favorlist: []
     })
 
-    onMounted(() => {
+    onMounted(async () => {
       Object.assign(state, {
         loading: true
       })
+      // todo: 测试用户鉴权
+      // const userInfo = await getUserInfo()
+      // console.log('userInfo', userInfo)
       // todo: code
       Promise.all(
         [queryBorrowList, queryFavorList].map(request => request()))

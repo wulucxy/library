@@ -1,5 +1,14 @@
 import { axios } from '@/utils';
 
+// 获取用户uid
+export const getUserInfo = (params) => {
+  return axios({
+    url: '/dd/user/getuserinfo',
+    method: 'get',
+    params
+  })
+}
+
 // 推荐新书
 export const queryRecommendList = () => {
   return axios({

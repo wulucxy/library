@@ -52,10 +52,13 @@ service.interceptors.request.use(
         console.log('===catch err', err)
         // do nothing
       }
-      
     } else if(/^(\/)?dd/.test(config.url)) {
+      // const authCode = await requestAuthCode()
       // 钉钉接口
       const parsed = addSearchParam(config.url, 'access_token', token)
+      // todo: debug
+      // const parsed = addSearchParam(config.url, ['access_token', 'code'], [token, authCode])
+      // console.log('parsed', parsed)
       config.url = parsed
     }
     config.headers['Content-Type'] = 'application/json';
