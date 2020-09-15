@@ -18,17 +18,16 @@
       <div class="action-bar" v-if="state.bookInfo">
         <Button
           type='default'
-          :class="state.bookInfo.isFav && 'btn-solid'"
+          :class="state.bookInfo.favorite && 'btn-solid'"
           @click="handleFav"
-        >{{ state.bookInfo.isFav ? '已收藏' : '收藏' }}</Button>
-        <Button type='primary' @click="handleBorrow">借书</Button>
+        >{{ state.bookInfo.favorite ? '已收藏' : '收藏' }}</Button>
+        <Button type='primary' @click="handleBorrow">扫码借书</Button>
       </div>
     </div>
-    <Bollow
-      :show="state.showBollowDialog"
-      :book="state.bookInfo"
-      :onCancel="handleCancel"
-      :onOk="handleConfirm"
+    <Borrow
+      v-if="state.bookInstanceId"
+      :bookInstanceId="state.bookInstanceId"
+      :onClose="handleClose"
     />
   </div>
 </template>
@@ -37,10 +36,9 @@ import { reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Button } from 'vant'
 
-import { BookInfoCell, TextCollapse, Placeholder } from '@/components'
-import { queryBookInfo, favBook, bollowBook } from '@/api'
-
-import { Bollow } from './components'
+import { Borrow, BookInfoCell, TextCollapse, Placeholder } from '@/components'
+import { utilScan } from '@/utils'
+import { queryBookInfo, favBook } from '@/api'
 
 export default {
   name: 'Result',
@@ -49,7 +47,7 @@ export default {
     TextCollapse,
     BookInfoCell,
     Button,
-    Bollow,
+    Borrow,
   },
   setup (props){
     const route = useRoute()
@@ -59,7 +57,7 @@ export default {
     const state = reactive({
       loading: false,
       bookInfo: null,
-      showBollowDialog: false,
+      bookInstanceId: null
     })
 
     onMounted(async () => {
@@ -80,45 +78,38 @@ export default {
     })
 
     const handleFav = () => {
-      const nextBookInfo = {...state.bookInfo, isFav: !state.bookInfo.isFav}
+      const nextBookInfo = {...state.bookInfo, favorite: !state.bookInfo.favorite}
       Object.assign(state, {
         bookInfo: nextBookInfo
       })
       // 同步保存后台
-      favBook(bookId, nextBookInfo.isFav)
-    }
-
-    const toggleDialog = () => {
-      Object.assign(state, {
-        showBollowDialog: !state.showBollowDialog
-      })
-    }
-
-    const handleCancel = () => {
-      toggleDialog()
-    }
-
-    const handleConfirm = (book) => {
-      bollowBook({
-        bookInstanceId: book.id
-      }).then(() => {
-        toggleDialog()
-      })
-      
+      favBook(bookId, nextBookInfo.favorite)
     }
 
     // 借书
     const handleBorrow = () => {
-      toggleDialog()
+      utilScan({
+        type: 'barCode',
+        onSuccess: (data) => {
+          // 图书二维码同步给后端
+          Object.assign(state, {
+            bookInstanceId: data.txt
+          })
+        }
+      })
+    }
+
+    const handleClose = () => {
+      Object.assign(state, {
+        bookInstanceId: null
+      })
     }
 
     return {
       state,
       handleFav,
       handleBorrow,
-      handleCancel,
-      handleConfirm,
-      toggleDialog
+      handleClose,
     }
   }
 }

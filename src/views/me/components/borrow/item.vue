@@ -11,7 +11,7 @@
   import { formatDateTime } from '@/utils'
   import { BookCell } from '@/components'
   export default {
-    name: 'BollowItem',
+    name: 'BorrowItem',
     components: {
       BookCell
     },

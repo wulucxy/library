@@ -2,9 +2,9 @@
   <div class="page me-page">
     <div class="me-result">
       <Tabs v-model="state.activeTab" class="inline-tabs">
-        <Tab name='bollow' title="我的借阅">
+        <Tab name='borrow' title="我的借阅">
           <Placeholder v-if="state.loading" />
-          <BollowList v-else :books="state.bollowList" />
+          <BorrowList v-else :books="state.borrowList" />
         </Tab>
         <Tab name='fav' title="我的收藏">
           <Placeholder v-if="state.loading" />
@@ -19,24 +19,23 @@ import { reactive, onMounted } from 'vue'
 import { Tabs, Tab } from 'vant'
 import Promise from 'bluebird'
 
-import { queryBollowList, queryFavorList } from '@/api'
+import { queryBorrowList, queryFavorList } from '@/api'
 import { Placeholder } from '@/components'
-import { BollowList } from './components'
-
+import { BorrowList } from './components'
 
 export default {
   name: 'Me',
   components: {
-    BollowList,
+    BorrowList,
     Tabs,
     Tab,
     Placeholder,
   },
   setup (props){
     const state = reactive({
-      activeTab: 'bollow',
+      activeTab: 'borrow',
       loading: false,
-      bollowList: [],
+      borrowList: [],
       favorlist: []
     })
 
@@ -44,11 +43,12 @@ export default {
       Object.assign(state, {
         loading: true
       })
+      // todo: code
       Promise.all(
-        [queryBollowList, queryFavorList].map(request => request()))
+        [queryBorrowList, queryFavorList].map(request => request()))
       .then(res => {
         Object.assign(state, {
-        bollowList: res[0],
+        borrowList: res[0],
         favorlist: res[1],
       })
       })

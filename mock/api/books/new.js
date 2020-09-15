@@ -16,6 +16,7 @@ module.exports = function() {
         "picturePath": "https://img.yzcdn.cn/vant/cat.jpeg",
         "press": "string",
         "price": 0,
+        "favorite": true,
         "updateTime": "2020-09-13T02:30:48.816Z",
         "updateUser": "string"
       }, {

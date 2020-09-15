@@ -37,6 +37,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
   background-color: #f7f8fa;
   -webkit-font-smoothing: antialiased;
+  user-select: none; 
 }
 
 h1, h2, h3, h4, h5, p, span{

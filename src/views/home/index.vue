@@ -10,7 +10,14 @@
       </CellGroup>
     </div>
     <div class='card-large'>
-      <Button type='primary' size="large" class='primary-btn primary-btn-shadow btn-1'>轻&nbsp;松&nbsp;借&nbsp;阅&nbsp;扫&nbsp;码&nbsp;自&nbsp;助</Button>
+      <Button
+        type='primary'
+        size="large"
+        class='primary-btn primary-btn-shadow btn-1'
+        @click="toBorrow"
+      >
+        轻&nbsp;松&nbsp;借&nbsp;阅&nbsp;扫&nbsp;码&nbsp;自&nbsp;助
+      </Button>
     </div>
     <div class="cell-list-wrapper">
       <Tabs v-model="state.activeTab" @change="handleTabChange" class="inline-tabs">
@@ -25,6 +32,11 @@
         <Tab name='rank' title="借阅排行">2</Tab>
       </Tabs>
     </div>
+    <Borrow
+      v-if="state.bookInstanceId"
+      :bookInstanceId="state.bookInstanceId"
+      :onClose="handleClose"
+    />
   </div>
 </template>
 <script>
@@ -32,8 +44,10 @@ import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { CellGroup, Search, Tabs, Tab, Button } from 'vant'
 
+import { Borrow } from '@/components'
 import { Recommend } from './components'
-import { axios } from '@/utils'
+import { queryRecommendList } from '@/api'
+import { utilScan } from '@/utils'
 import CONST from '@/utils/const'
 
 export default {
@@ -44,7 +58,8 @@ export default {
     Search,
     Tabs,
     Tab,
-    Recommend
+    Recommend,
+    Borrow
   },
   setup (){
     const router = useRouter()
@@ -65,6 +80,7 @@ export default {
           records: []
         }
       },
+      bookInstanceId: null
     })
 
     const onFocus = () => {
@@ -82,6 +98,26 @@ export default {
       const next = Object.assign({}, state[type], obj)
       Object.assign(state, {
         [type]: next
+      })
+    }
+
+    // 借书
+    const toBorrow = () => {
+      utilScan({
+        type: 'barCode',
+        onSuccess: (data) => {
+          // 图书二维码同步给后端
+          Object.assign(state, {
+            bookInstanceId: data.txt
+          })
+        }
+      })
+    }
+
+    // 关闭借书弹窗
+    const handleClose = () => {
+      Object.assign(state, {
+        bookInstanceId: null
       })
     }
 
@@ -110,7 +146,7 @@ export default {
       updateState('recommend', {
         loading: true,
       })
-      axios.get('/api/books/new').then(res => {
+      queryRecommendList().then(res => {
         updateState('recommend', {
           loading: false,
           finished: res.pages < CONST.pageSize,
@@ -124,12 +160,12 @@ export default {
       updateState,
       updateBook,
       onFocus,
+      toBorrow,
+      handleClose,
       handleTabChange
     }
   }
 }
-
-
 </script>
 <style scoped>
   .cell-list-wrapper{

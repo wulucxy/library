@@ -38,7 +38,7 @@ export default {
       default: () => ({})
     }
   },
-  setup (props, ctx){
+  setup (props){
     // eslint-disable-next-line
     const { updateBook } = props
     const router = useRouter()
@@ -46,7 +46,7 @@ export default {
       loading: props.loading,
     })
 
-    const handleBookClick = (book, event) => {
+    const handleBookClick = (book) => {
       router.push({
         path: '/detail',
         query: { id: book.id }
@@ -55,10 +55,10 @@ export default {
 
     const handleFav = (book) => {
       updateBook(book, {
-        isFav: !book.isFav
+        favorite: !book.favorite
       })
       // 收藏图书
-      favBook(book.id, !book.isFav)
+      favBook(book.id, !book.favorite)
     }
 
     const onLoad = () => {}

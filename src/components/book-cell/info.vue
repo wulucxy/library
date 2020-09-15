@@ -13,17 +13,16 @@
     <template v-slot:footer="slotProps">
       <div class='fav'>
         <Icon
-          :name="slotProps.book.isFav ? 'like' : 'like-o'"
+          :name="slotProps.book.favorite ? 'like' : 'like-o'"
           class="vm f16"
-          :class="slotProps.book.isFav && 'active'"
+          :class="slotProps.book.favorite && 'active'"
         />
-        <span class='ml-6 vm'>{{ slotProps.book.isFav ? '已收藏' : '收藏' }}</span>
+        <span class='ml-6 vm'>{{ slotProps.book.favorite ? '已收藏' : '收藏' }}</span>
       </div>
     </template>
   </BookCell>
 </template>
 <script>
-import cx from 'classnames'
 import { Icon } from 'vant'
 
 import BookCell from './cell'
@@ -37,16 +36,6 @@ export default {
   components: {
     BookCell,
     Icon
-  },
-  setup(props) {
-    const { updateState } = props
-    const iconClass = cx('vm f16', {
-      active: !!props.book.isFav
-    })
-
-    return {
-      iconClass,
-    }
   }
 }
 </script> 

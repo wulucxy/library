@@ -1,7 +1,7 @@
 import { Empty } from 'vant'
-import BollowItem from './item'
+import BorrowItem from './item'
 
-const Bollow = (props) => {
+const Borrow = (props) => {
   const { books } = props
   if(books.length === 0)
     return (
@@ -12,7 +12,7 @@ const Bollow = (props) => {
       { books.map(book => {
         return (
           <div key={book.id}>
-            <BollowItem book={book} />
+            <BorrowItem book={book} />
           </div>
         )
       }) }
@@ -20,11 +20,11 @@ const Bollow = (props) => {
   )
 }
 
-Bollow.props = {
+Borrow.props = {
  books: {
    type: Array,
    default: () => ([])
  },
 }
 
-export default Bollow
+export default Borrow

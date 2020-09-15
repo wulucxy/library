@@ -1,18 +1,29 @@
 import { axios } from '@/utils';
 
+// 推荐新书
+export const queryRecommendList = () => {
+  return axios({
+    url: '/api/books/new',
+    method: 'get'
+  });
+}
+
 // 收藏图书
-export const favBook = (params) => {
+export const favBook = (bookId, favorite) => {
   return axios({
     url: '/api/books/favorite',
     method: 'post',
-    data: params,
+    data: {
+      bookId,
+      favorite
+    },
   });
 }
 
 // 借书
-export const bollowBook = (params) => {
+export const borrowBook = (params) => {
   return axios({
-    url: '/api/books/bollow',
+    url: '/api/books/borrow',
     method: 'post',
     data: params,
   });
@@ -24,6 +35,14 @@ export const searchBook = (params) => {
     url: '/api/books',
     method: 'get',
     params,
+  });
+}
+
+// 根据图书唯一id 获取图书详情
+export const queryBookInfoByInstanceId = (instanceId) => {
+  return axios({
+    url: `/api/books/instances/${instanceId}`,
+    method: 'get',
   });
 }
 
@@ -54,7 +73,7 @@ export const queryBookInfo = (bookId) => {
 }
 
 // 查询我借阅的图书
-export const queryBollowList = () => {
+export const queryBorrowList = () => {
   return axios({
     url: `/api/books/mine`,
     method: 'get'

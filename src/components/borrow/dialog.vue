@@ -6,9 +6,10 @@
       :before-close="handleBeforeClose"
       @cancel="onCancel"
       @confirm="handleOk"
+      @close="onClose"
     >
       <slot v-bind:book="book">
-        <div class="bollow-tip tc mt-16 mb-16">
+        <div class="borrow-tip tc mt-16 mb-16">
           <h4>《{{ book.name }}》?</h4>
           <div class="divider flex flex-between">
             <div class="divider-line van-hairline--top divider-left"></div>
@@ -25,7 +26,7 @@
 import { reactive, watch } from 'vue'
 import { Dialog } from 'vant'
 export default {
-  name: "Bollow",
+  name: "BorrowDialog",
   components: {
     [Dialog.Component.name]: Dialog.Component,
   },
@@ -37,6 +38,7 @@ export default {
     },
     onCancel: Function,
     onOk: Function,
+    onClose: Function,
     book: Object,
   },
   setup(props){
@@ -91,7 +93,7 @@ export default {
       }
     }
   }
-  .bollow-tip{
+  .borrow-tip{
     padding: 0 20px;
     h4{
       font-size: 14px;

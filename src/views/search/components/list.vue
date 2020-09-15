@@ -55,7 +55,7 @@ export default {
 
     const handleFav = (book) => {
       updateBook(book, {
-        isFav: !book.isFav
+        favorite: !book.favorite
       })
     }
 

@@ -15,11 +15,11 @@
           placeholder="请输入作者"
           :rules="[{ required: true, message: '请输入作者' }]"
         />
-        <Field label="上传图片" v-model="state.picturePath">
+        <!-- <Field label="上传图片" v-model="state.picturePath">
           <template #input>
             <Uploader />
           </template>
-        </Field>
+        </Field> -->
       </CellGroup>
       <CellGroup title="智能识别">
         <Cell

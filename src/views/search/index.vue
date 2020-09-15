@@ -141,7 +141,7 @@ export default {
     const updateBook = (book) => {
       const nextRecords = searchResult.records.map(d => {
         if(d.id === book.id) {
-          return {...d, isFav: !book.isFav}
+          return {...d, favorite: !book.favorite}
         }
         return d
       })
@@ -149,7 +149,7 @@ export default {
         records: nextRecords
       })
       // 收藏图书
-      favBook(book.id, !book.isFav)
+      favBook(book.id, !book.favorite)
     }
 
     onMounted(() => {

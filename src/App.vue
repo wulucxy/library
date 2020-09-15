@@ -57,32 +57,32 @@ export default {
         throw(err)
       }
             
-      setMenu({
-        backgroundColor: "#ADD8E6",
-        textColor: "#ADD8E611",
-        items: [
-            {
-              "id": "1",// 字符串
-              "iconId": "scan",//字符串，图标命名
-              "text": "扫码"
-            },
-        ],
-        onSuccess: function(data) {
-          // 扫码图书
-          if(data.id === '1') {
-            utilScan({
-              type: 'barCode',
-              onSuccess: (data) => {
-                // 图书二维码同步给后端
-                console.log('data2', data)
-              }
-            })
-          }
-        },
-        onFail: function(err) {
-          console.log('err', err)
-        }
-      })
+      // setMenu({
+      //   backgroundColor: "#ADD8E6",
+      //   textColor: "#ADD8E611",
+      //   items: [
+      //       {
+      //         "id": "1",// 字符串
+      //         "iconId": "scan",//字符串，图标命名
+      //         "text": "扫码"
+      //       },
+      //   ],
+      //   onSuccess: function(data) {
+      //     // 扫码图书
+      //     if(data.id === '1') {
+      //       utilScan({
+      //         type: 'barCode',
+      //         onSuccess: (data) => {
+      //           // 图书二维码同步给后端
+      //           console.log('data2', data)
+      //         }
+      //       })
+      //     }
+      //   },
+      //   onFail: function(err) {
+      //     console.log('err', err)
+      //   }
+      // })
     })
 
     return {
@@ -94,17 +94,3 @@ export default {
   }
 }
 </script>
-
-<style>
-body{
-  user-select:none; 
-}
-#app {
-  font-family: "SF Pro SC","SF Pro Text","SF Pro Icons","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
-  font-style: normal;
-  letter-spacing: 0em;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-</style>
