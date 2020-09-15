@@ -37,7 +37,11 @@ const router = createRouter({
       meta: { title: '我的', showTabBar: true },
       component: Me
     },
-  ]
+  ],
+  scrollBehavior() {
+    // always scroll to top
+    return { top: 0 }
+  }
 })
 
 router.beforeEach((to, from, next) => {
