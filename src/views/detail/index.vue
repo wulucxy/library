@@ -28,6 +28,7 @@
       v-if="state.bookInstanceId"
       :bookInstanceId="state.bookInstanceId"
       :onClose="handleClose"
+      :resetInstance="resetInstance"
     />
   </div>
 </template>
@@ -100,6 +101,10 @@ export default {
     }
 
     const handleClose = () => {
+      resetInstance()
+    }
+
+    const resetInstance = () => {
       Object.assign(state, {
         bookInstanceId: null
       })
@@ -108,6 +113,7 @@ export default {
     return {
       state,
       handleFav,
+      resetInstance,
       handleBorrow,
       handleClose,
     }

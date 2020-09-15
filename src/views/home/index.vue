@@ -39,6 +39,7 @@
       v-if="state.bookInstanceId"
       :bookInstanceId="state.bookInstanceId"
       :onClose="handleClose"
+      :resetInstance="resetInstance"
     />
   </div>
 </template>
@@ -139,6 +140,12 @@ export default {
       onLoad()
     }
 
+    const resetInstance = () => {
+      Object.assign(state, {
+        bookInstanceId: null
+      })
+    }
+
     // 借书
     const toBorrow = () => {
       utilScan({
@@ -154,9 +161,7 @@ export default {
 
     // 关闭借书弹窗
     const handleClose = () => {
-      Object.assign(state, {
-        bookInstanceId: null
-      })
+      resetInstance()
     }
 
     // 更新指定图书状态
@@ -186,6 +191,7 @@ export default {
       onRefresh,
       toBorrow,
       handleClose,
+      resetInstance,
       handleTabChange
     }
   }

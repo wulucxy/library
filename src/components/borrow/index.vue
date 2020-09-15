@@ -22,8 +22,11 @@ export default {
   props: {
     bookInstanceId: String,
     onClose: Function,
+    resetInstance: Function,
   },
   setup(props){
+    // eslint-disable-next-line
+    const { resetInstance } = props
     const state = reactive({
       bookInfo: null,
       showDialog: false,
@@ -50,12 +53,16 @@ export default {
     onMounted(() => {
       queryBookInfoByInstanceId(props.bookInstanceId).then(bookInfo => {
         if(!bookInfo) {
+          resetInstance()
           throw new Error('无法查询此书本信息，请联系管理员')
         }
         Object.assign(state, {
           bookInfo,
           showDialog: true,
         })
+      }).catch(err => {
+        resetInstance()
+        throw(err)
       })
     })
 
