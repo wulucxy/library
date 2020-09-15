@@ -69,6 +69,18 @@ module.exports = {
         })
       }
 
+      // 处理 restful mock 接口
+    const mockMap = require(path.join(__dirname, 'mock/mock-map'))
+
+    // 对于每个 mock 请求，require mock 文件夹下的对应路径文件，并返回响应
+    Object.keys(mockMap).forEach(mockPath => {
+      app.all(path.posix.join('/mock', mockPath), function(req, res) {
+        const value = requireUncached(path.join(__dirname, 'mock', mockMap[mockPath]))
+
+        sendValue(req, res, value)
+      })
+    })
+
       app.all('/mock/*', function(req, res) {
         const mockPath = path.join(__dirname, req.path)
         const value = requireUncached(mockPath)

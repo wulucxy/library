@@ -52,7 +52,6 @@ service.interceptors.request.use(
         console.log('===catch err', err)
         // do nothing
       }
-      
     } else if(/^(\/)?dd/.test(config.url)) {
       // 钉钉接口
       const parsed = addSearchParam(config.url, 'access_token', token)

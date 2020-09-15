@@ -19,18 +19,23 @@ const router = createRouter({
     },
     {
       path: '/search',
-      meta: { title: '搜索',  showTabBar: false },
+      meta: { title: '搜索', showTabBar: false },
       component: () => import('@/views/search')
     },
     {
       path: '/detail',
-      meta: { title: '图书详情',  showTabBar: false },
+      meta: { title: '图书详情', showTabBar: false },
       component: () => import('@/views/detail')
     },
     {
       path: '/apply',
-      meta: { title: '购书申请',  showTabBar: true },
+      meta: { title: '购书申请', showTabBar: true },
       component: Apply
+    },
+    {
+      path: '/add',
+      meta: { title: '录入图书', showTabBar: false },
+      component: () => import('@/views/add')
     },
     {
       path: '/me',
