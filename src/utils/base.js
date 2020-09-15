@@ -1,7 +1,6 @@
 import url from 'url';
 import { format, parseISO, isDate } from 'date-fns';
 
-
 export const addSearchParam = function(link, param, value) {
   param = encodeURIComponent(param);
   var a = url.parse(link)

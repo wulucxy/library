@@ -23,10 +23,26 @@ import { ddAuth, utilScan, setMenu } from '@/utils'
 
 import './assets/style/index.scss'
 
+import MeIcon from './assets/images/me.png'
+import MeActiveIcon from './assets/images/me-active.png'
+import HomeIcon from './assets/images/home.png'
+import HomeActiveIcon from './assets/images/home-active.png'
+import ApplyIcon from './assets/images/apply.png'
+import ApplyActiveIcon from './assets/images/apply-active.png'
+
  const tabBarData = [
-  {label: '购书申请', name: 'apply', icon: 'shopping-cart', path: '/apply'},
-  {label: '首页', name: 'home', icon: 'wap-home', path: '/'},
-  {label: '我', name: 'me', icon: 'manager', path: '/me'}
+  {label: '购书申请', name: 'apply', path: '/apply', icon: {
+    active: ApplyActiveIcon,
+    unactive: ApplyIcon
+  }},
+  {label: '首页', name: 'home', path: '/', icon: {
+    active: HomeActiveIcon,
+    unactive: HomeIcon
+  }},
+  {label: '我', name: 'me', path: '/me', icon: {
+    active: MeActiveIcon,
+    unactive: MeIcon
+  }}
 ];
 
 export default {

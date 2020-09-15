@@ -44,8 +44,8 @@ const ddAuth = () => {
     const nonce = 'zhejianglab'
 
     const url = window.location.href.replace(window.location.hash, '')
-    return getTokenService(Settings).then(access_token => {
-      getJsApiTicket({ access_token }).then(ticket => {
+    return getTokenService(Settings).then(() => {
+      getJsApiTicket().then(ticket => {
         const signature = getJsApiSignature(ticket, nonce, timeStamp, url)
          // 鉴权
         ddConfig({

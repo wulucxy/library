@@ -8,11 +8,14 @@
       <TabbarItem 
         v-for="(item,index) of data"
         :key="index"
-        :icon="item.icon"
+        replace
         :to="item.path"
         :name="item.name"
       >
-        {{item.label}}
+        <span>{{item.label}}</span>
+        <template #icon="props">
+          <img :src="props.active ? item.icon.active : item.icon.unactive" />
+        </template>
       </TabbarItem>
     </Tabbar>
   </div>
