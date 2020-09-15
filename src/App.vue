@@ -23,12 +23,12 @@ import { ddAuth, utilScan, setMenu } from '@/utils'
 
 import './assets/style/index.scss'
 
-import '@/assets/images/me.png'
-import '@/assets/images/me-active.png'
-import '@/assets/images/home.png'
-import '@/assets/images/home-active.png'
-import '@/assets/images/apply.png'
-import '@/assets/images/apply-active.png'
+// import '@/assets/images/me.png'
+// import '@/assets/images/me-active.png'
+// import '@/assets/images/home.png'
+// import '@/assets/images/home-active.png'
+// import '@/assets/images/apply.png'
+// import '@/assets/images/apply-active.png'
 
  const tabBarData = [
   {label: '购书申请', name: 'apply', path: '/apply', icon: 'shopping-cart'},
