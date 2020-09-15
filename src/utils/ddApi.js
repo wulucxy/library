@@ -86,7 +86,13 @@ export function ddConfig (config) {
  * 扫描条形码、二维码
  */
 export function utilScan (config) {
-  return dd.biz.util.scan({ ...baseConfig(), ...config })
+  return dd.biz.util.scan({ 
+    ...baseConfig(),
+    onFail: function(err) {
+      throw err
+    },
+    ...config
+  })
 }
 // https://ding-doc.dingtalk.com/doc#/dev/oawo7q/5888bb96
 export function complexPicker (config) {

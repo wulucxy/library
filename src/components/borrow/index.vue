@@ -49,6 +49,9 @@ export default {
 
     onMounted(() => {
       queryBookInfoByInstanceId(props.bookInstanceId).then(bookInfo => {
+        if(!bookInfo) {
+          throw new Error('无法查询此书本信息，请联系管理员')
+        }
         Object.assign(state, {
           bookInfo,
           showDialog: true,

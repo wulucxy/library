@@ -35,7 +35,7 @@
         </Cell>
       </CellGroup>
       <div class="form-footer mt-16">
-        <Button @click="handleReset">重&nbsp;&nbsp;置</Button>
+        <Button @click="resetForm">重&nbsp;&nbsp;置</Button>
         <Button @click="onSubmit" type='primary'>提&nbsp;&nbsp;交</Button>
       </div>
     </Form>
@@ -43,7 +43,7 @@
 </template>
 <script>
 import { reactive, ref } from 'vue'
-import { Form, CellGroup, Cell, Icon, Field, Button, Uploader } from 'vant'
+import { Form, CellGroup, Cell, Icon, Field, Button, Uploader, Toast } from 'vant'
 
 import { Card } from '@/components'
 import { utilScan } from '@/utils'
@@ -77,7 +77,7 @@ export default {
         type: 'barCode',
         onSuccess: (data) => {
           // 图书二维码同步给后端
-          queryISBN(data.txt).then(res => {
+          queryISBN(data.text).then(res => {
             Object.assign(state, {
               author: res.bookInfo['作者'],
               name: res.title,
@@ -89,7 +89,7 @@ export default {
       })
     }
 
-    const handleReset = () => {
+    const resetForm = () => {
       Object.assign(state, {
         name: '',
         author: '',
@@ -103,6 +103,9 @@ export default {
           purchaseBook({
             author: state.author,
             bookName: state.name
+          }).then(() => {
+            resetForm()
+            Toast.success('提交成功')
           })
         })
         .catch(err => console.error(err))
@@ -113,7 +116,7 @@ export default {
       formRef,
       state,
       handleDetect,
-      handleReset,
+      resetForm,
       onSubmit
     }
   }
