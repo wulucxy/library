@@ -40,11 +40,11 @@
           type="textarea"
           placeholder="请输入图书描述"
         />
-        <!-- <Field label="上传图片" v-model="state.picturePath">
+        <Field label="图书封面">
           <template #input>
-            <Uploader />
+            <Uploader v-model="state.picturePath" />
           </template>
-        </Field> -->
+        </Field>
       </CellGroup>
       <CellGroup title="智能添加图书">
         <Cell
@@ -71,7 +71,7 @@ import { reactive, ref } from 'vue'
 import { Form, CellGroup, Cell, Icon, Field, Button, Uploader, Toast } from 'vant'
 
 import { utilScan } from '@/utils'
-import { queryBookInfoByInstanceId, createBook } from '@/api'
+import { queryISBN, createBook } from '@/api'
 
 export default {
   name: 'AddBook',
@@ -89,14 +89,13 @@ export default {
     const formRef = ref(null)
 
     const intialState = {
-      id: '',
       name: '',
       author: '',
       press: '',
       price: undefined,
       isbn: '',
       intro: '',
-      picturePath: ''
+      picturePath: []
     }
 
     const state = reactive(intialState)
@@ -106,17 +105,16 @@ export default {
       utilScan({
         type: 'barCode',
         onSuccess: (data) => {
-          console.log('data===', data)
           // 图书二维码同步给后端
-          queryBookInfoByInstanceId(data.text).then(res => {
-            console.log('===res===', res)
+          queryISBN(data.text).then(res => {
             Object.assign(state, {
-              author: res.author,
-              name: res.name,
-              press: res.press,
+              author: res.bookInfo['作者'],
+              name: res.title,
+              press: res.bookInfo['出版社'],
               isbn: res.isbn,
-              price: res.price,
-              intro: res.intro
+              price: parseFloat(res.bookInfo['定价']),
+              intro: res.bookIntro,
+              picturePath: [res.coverUrl],
             })
             // todo: ios 无法触发
             nameRef.value.$el?.querySelector('input').focus()

@@ -16,7 +16,7 @@ module.exports = {
     "catalog": [
       {}
     ],
-    "coverUrl": "string",
+    "coverUrl": "https://img.yzcdn.cn/vant/cat.jpeg",
     "createTime": "string",
     "isbn": "string",
     "labels": [

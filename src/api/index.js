@@ -75,7 +75,7 @@ export const queryBookInfo = (bookId) => {
 // 查询我借阅的图书
 export const queryBorrowList = () => {
   return axios({
-    url: `/api/books/mine`,
+    url: `/api/books/borrow/mine`,
     method: 'get'
   });
 }
