@@ -46,6 +46,8 @@ service.interceptors.request.use(
             config.headers['code'] = authCode
           }
         }
+        console.log('===config.request.url===', config.url)
+        console.log('===config.headers', config.headers)
       } catch(err) {
         console.log('===catch err', err)
         // do nothing
@@ -56,7 +58,6 @@ service.interceptors.request.use(
       const parsed = addSearchParam(config.url, 'access_token', token)
       config.url = parsed
     }
-    console.log('===config.headers', config.headers)
     config.headers['Content-Type'] = 'application/json';
     return config;
   },

@@ -22,12 +22,15 @@
     <div class="cell-list-wrapper">
       <Tabs v-model="state.activeTab" @change="handleTabChange" class="inline-tabs">
         <Tab name='recommend' title="新书推荐">
-          <Recommend
-            :data="state.recommend.data"
-            :loading="state.recommend.loading"
-            :finished="state.recommend.finished"
-            :updateBook="updateBook"
-          />
+          <PullRefresh v-model="state.refreshing" @refresh="onRefresh">
+            <Recommend
+              :data="state.recommend.data"
+              :loading="state.recommend.loading"
+              :finished="state.recommend.finished"
+              :updateBook="updateBook"
+              :onLoad="onLoad"
+            />
+          </PullRefresh>
         </Tab>
         <Tab name='rank' title="借阅排行">2</Tab>
       </Tabs>
@@ -40,9 +43,9 @@
   </div>
 </template>
 <script>
-import { reactive, onMounted } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { CellGroup, Search, Tabs, Tab, Button } from 'vant'
+import { CellGroup, Search, Tabs, Tab, Button, PullRefresh } from 'vant'
 
 import { Borrow } from '@/components'
 import { Recommend } from './components'
@@ -55,6 +58,7 @@ export default {
   components: {
     Button,
     CellGroup,
+    PullRefresh,
     Search,
     Tabs,
     Tab,
@@ -64,21 +68,23 @@ export default {
   setup (){
     const router = useRouter()
 
+    // 请求 map
+    const requestMap = {
+      recommend: queryRecommendList
+    }
+
     const state = reactive({
       activeTab: 'recommend',
+      refreshing: false, // 下拉刷新
       recommend: {
         loading: false,
         finished: false,
-        data: {
-          records: []
-        },
+        data: [],
       },
       rank: {
         loading: false,
         finished: false,
-        data: {
-          records: []
-        }
+        data: [],
       },
       bookInstanceId: null
     })
@@ -99,6 +105,38 @@ export default {
       Object.assign(state, {
         [type]: next
       })
+    }
+
+    const onLoad = () => {
+      const request = requestMap[state.activeTab]
+      updateState(state.activeTab, {
+        loading: true,
+      })
+      // 下拉刷新
+      if (state.refreshing) {
+        Object.assign(state, {
+          refreshing: false
+        })
+        updateState(state.activeTab, {
+          data: []
+        })
+      }
+      request().then(res => {
+        setTimeout(() => {
+          updateState(state.activeTab, {
+            loading: false,
+            finished: res.pages < CONST.pageSize,
+            data: res.records
+          })
+        }, 800)
+      })
+    }
+
+    const onRefresh = () => {
+      updateState(state.activeTab, {
+        finished: false,
+      })
+      onLoad()
     }
 
     // 借书
@@ -124,42 +162,28 @@ export default {
     // 更新指定图书状态
     const updateBook = (book, params) => {
       const curTab = state[state.activeTab]
-      const curBook = curTab.data.records.find(d => d.id === book.id)
+      const curBook = curTab.data.find(d => d.id === book.id)
       if(curBook) {
         const nextTab = {
           ...curTab,
-          data: {
-            ...curTab.data,
-            records: curTab.data.records.map(d => {
-              if(d.id === book.id) {
-                return {...d, ...params}
-              }
-              return d
-            })
-          }
+          data: curTab.data.map(d => {
+            if(d.id === book.id) {
+              return {...d, ...params}
+            }
+            return d
+          })
         }
         updateState(state.activeTab, nextTab)
       }
     }
 
-    onMounted(() => {
-      updateState('recommend', {
-        loading: true,
-      })
-      queryRecommendList().then(res => {
-        updateState('recommend', {
-          loading: false,
-          finished: res.pages < CONST.pageSize,
-          data: res
-        })
-      })
-    })
-
     return {
       state,
+      onLoad,
       updateState,
       updateBook,
       onFocus,
+      onRefresh,
       toBorrow,
       handleClose,
       handleTabChange
@@ -170,6 +194,7 @@ export default {
 <style scoped>
   .cell-list-wrapper{
     background-color: #fff;
+    min-height: 66.7vh;
   }
   .card-large{
     margin: 8px 0;

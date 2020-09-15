@@ -1,13 +1,13 @@
 <template>
   <List
-    v-model="state.loading"
+    v-model:loading="state.loading"
     :finished="finished"
     class="book-list"
     finished-text="没有更多了"
     @load="onLoad"
   >
     <BookInfoCell
-      v-for="book in data.records"
+      v-for="book in data"
       :key="book.id"
       :book="book"
       :handleItemClick="handleBookClick"
@@ -16,7 +16,7 @@
   </List>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { List } from 'vant'
 import { useRouter } from 'vue-router'
 
@@ -33,6 +33,7 @@ export default {
     loading: Boolean,
     finished: Boolean,
     updateBook: Function,
+    onLoad: Function,
     data: {
       type: Object,
       default: () => ({})
@@ -61,11 +62,12 @@ export default {
       favBook(book.id, !book.favorite)
     }
 
-    const onLoad = () => {}
+    watch(() => props.loading, (next) => {
+      state.loading = next
+    })
 
     return {
       state,
-      onLoad,
       handleBookClick,
       handleFav,
     }

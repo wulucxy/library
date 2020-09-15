@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <Placeholder v-if="!state.userInfo" />
-    <div v-else>
-      <router-view class="child-view"></router-view>
-      <TabBar
-        v-if="showTabBar"
-        :data="tabBarData"
-        :activeRoute="activeRoute"
-      />
-    </div>
+  <Placeholder v-if="!state.userInfo" />
+  <div v-else>
+    <router-view v-slot="{ Component }">
+      <keep-alive include="Home">
+        <component :is="Component"></component>
+      </keep-alive>
+    </router-view>
+    <TabBar
+      v-if="showTabBar"
+      :data="tabBarData"
+      :activeRoute="activeRoute"
+    />
   </div>
 </template>
 

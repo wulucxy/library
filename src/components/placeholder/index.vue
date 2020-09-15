@@ -1,5 +1,5 @@
 <template>
-  <Skeleton title :row="6" style="marginTop: 16px" />
+  <Skeleton title :row="6" style="paddingTop: 16px" />
 </template>
 <script>
   import { Skeleton } from 'vant'
