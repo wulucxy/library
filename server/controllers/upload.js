@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 
 module.exports = async ctx => {
@@ -8,6 +8,7 @@ module.exports = async ctx => {
     responseType: 'stream'
   }).then(response => {
     const resourseName = path.basename(imageUrl)
+    fs.ensureDirSync(path.join(__dirname, `../uploads`))
     const destPath = path.join(__dirname, `../uploads/${resourseName}`)
     response.data.pipe(fs.createWriteStream(destPath));
     return `/uploads/${resourseName}`;
