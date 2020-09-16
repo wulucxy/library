@@ -149,7 +149,7 @@ export default {
             isbn: state.isbn,
             intro: state.intro,
             press: state.press,
-            price: state.price,
+            price: Number(state.price),
             picturePath: uploadUrl,
           }).then(({ id }) => {
             // 上传图片

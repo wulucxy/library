@@ -19,8 +19,6 @@ const readFile = util.promisify(fs.readFile);
 
 const PORT = process.env.PORT || 3000
 
-app.use(bodyParser())
-
 app.use(proxy('/dd', {
   target: 'https://oapi.dingtalk.com',
   changeOrigin: true,
@@ -36,6 +34,8 @@ app.use(proxy('/api', {
   rewrite: path => path.replace(/^\/api/, '/api'),
   logs: true
 }))
+
+app.use(bodyParser())
 
 app.use(mount('/static', serve(path.join(__dirname, '../dist/static'))));
 app.use(mount('/uploads', serve(path.join(__dirname, 'uploads'))));
