@@ -42,7 +42,7 @@
         />
         <Field label="图书封面">
           <template #input>
-            <Uploader v-model="state.picturePath" />
+            <Uploader v-model="state.picturePath" :max-count="1" />
           </template>
         </Field>
       </CellGroup>
@@ -60,8 +60,13 @@
         </Cell>
       </CellGroup>
       <div class="form-footer mt-16">
-        <Button @click="resetForm">重&nbsp;&nbsp;置</Button>
-        <Button @click="onSubmit" type='primary'>提&nbsp;&nbsp;交</Button>
+        <Button @click="resetForm">重&nbsp;置</Button>
+        <Button
+          @click="onSubmit"
+          :loading="state.loading"
+          loading-text="加载中..."
+          type='primary'
+        >提&nbsp;交</Button>
       </div>
     </Form>
   </div>
@@ -71,7 +76,7 @@ import { reactive, ref } from 'vue'
 import { Form, CellGroup, Cell, Icon, Field, Button, Uploader, Toast } from 'vant'
 
 import { utilScan } from '@/utils'
-import { queryISBN, createBook } from '@/api'
+import { queryISBN, createBook, uploadImg } from '@/api'
 
 export default {
   name: 'AddBook',
@@ -95,7 +100,8 @@ export default {
       price: undefined,
       isbn: '',
       intro: '',
-      picturePath: []
+      picturePath: [],
+      loading: false,
     }
 
     const state = reactive(intialState)
@@ -128,8 +134,16 @@ export default {
     }
 
     const onSubmit = () => {
+      Object.assign(state, {
+        loading: true
+      })
+
       formRef.value.validate()
-        .then(() => {
+        .then(async () => {
+          console.log('state', state.picturePath)
+          const uploadUrl = await uploadImg({url: state.picturePath[0] })
+          console.log('uploadUrl', uploadUrl)
+          // 首先将图片保存到 minIO
           createBook({
             author: state.author,
             name: state.name,
@@ -137,13 +151,19 @@ export default {
             intro: state.intro,
             press: state.press,
             price: state.price,
-            picturePath: state.picturePath,
-          }).then(() => {
+            picturePath: uploadUrl,
+          }).then(({ id }) => {
+            // 上传图片
+            // minIOUpload({ objectPath: `books/${id}`, fileList: state.picturePath })
             resetForm()
             Toast.success('创建成功')
-          })
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          console.error(err)
+          throw err
+        })
+        .finally(() => Object.assign(state, { loading: false }))
+      })
     }
 
     return {

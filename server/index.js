@@ -1,17 +1,25 @@
+require('app-module-path/register')
+
 const Koa = require('koa');
 
 const app = new Koa();
 const serve = require('koa-static');
 const mount = require('koa-mount');
 const proxy = require('koa-proxies');
+const bodyParser = require('koa-bodyparser')
 
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
 
+const axiosMiddleware = require('./middleware/axios')
+const router = require('./router')
+
 const readFile = util.promisify(fs.readFile);
 
 const PORT = process.env.PORT || 3000
+
+app.use(bodyParser())
 
 app.use(proxy('/dd', {
   target: 'https://oapi.dingtalk.com',
@@ -30,6 +38,11 @@ app.use(proxy('/api', {
 }))
 
 app.use(mount('/static', serve(path.join(__dirname, '../dist/static'))));
+app.use(mount('/uploads', serve(path.join(__dirname, 'uploads'))));
+
+app.use(axiosMiddleware())
+// 路由配置
+app.use(router.routes(), router.allowedMethods())
 
 app.use(async (ctx) => {
   ctx.set('Content-Type', 'text/html');

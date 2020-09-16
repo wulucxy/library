@@ -1,3 +1,4 @@
+// 查询指定id 图片
 module.exports = function() {
   return {
     code: 200,

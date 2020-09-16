@@ -96,3 +96,12 @@ export const queryISBN = (isbn) => {
     params: { isbn }
   });
 }
+
+// 上传图片
+export const uploadImg = data => {
+  return axios({
+    url: `/library/upload`,
+    method: 'post',
+    data
+  });
+}
