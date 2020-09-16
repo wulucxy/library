@@ -1,6 +1,6 @@
 <template>
-  <!-- <Placeholder v-if="!state.userInfo" /> -->
-  <div>
+  <Placeholder v-if="!state.userInfo" />
+  <div v-else>
     <router-view v-slot="{ Component }">
       <keep-alive include="Home">
         <component :is="Component"></component>
@@ -63,7 +63,7 @@ export default {
     // 是否展示 tabBar
     const showTabBar = computed(() => !!store.state.activeRoute?.meta?.showTabBar)
 
-    onMounted(async () => {      
+    onMounted(async () => {
       try {
         const userInfo = await ddAuth()
         store.dispatch('setUserInfo', userInfo)

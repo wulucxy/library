@@ -1,9 +1,4 @@
 import { Toast } from 'vant'
-import MinioClient from '@/utils/minio';
-// import 'web-streams-polyfill'
-
-// 实例化 minIO
-window.minioClient = new MinioClient();
 
 // 只针对 promise 异步捕获
 // eslint-disable-next-line func-names

@@ -143,7 +143,6 @@ export default {
           console.log('state', state.picturePath)
           const uploadUrl = await uploadImg({url: state.picturePath[0] })
           console.log('uploadUrl', uploadUrl)
-          // 首先将图片保存到 minIO
           createBook({
             author: state.author,
             name: state.name,
@@ -154,7 +153,6 @@ export default {
             picturePath: uploadUrl,
           }).then(({ id }) => {
             // 上传图片
-            // minIOUpload({ objectPath: `books/${id}`, fileList: state.picturePath })
             resetForm()
             Toast.success('创建成功')
         })
