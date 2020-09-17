@@ -4,6 +4,8 @@ import { noop } from '@/utils'
 
 import './style.scss'
 
+const CONST = require('@/utils/const')
+
 const BookCell = (props, ctx) => {
   const { handleClick = noop, handleFav = noop, clickable } = props
   const handleCellClick = (event) => {
@@ -20,12 +22,14 @@ const BookCell = (props, ctx) => {
     cell_clickable: !!clickable
   })
 
+  const imageUrl = props.book.picturePath ? `${CONST.uploadBaseUrl}${props.book.picturePath}` : undefined
+
   return (
     <section class={classNames} onClick={handleCellClick}>
       <Image style={{
         width: "20vw",
         height: "28vw"
-      }} fit='contain' src={props.book.picturePath} />
+      }} fit='contain' src={imageUrl} />
       <div class='f1 media-body flex flex-column'>
         <div class='media-content'>
           {ctx.slots.desc({ book: props.book })}

@@ -13,7 +13,7 @@ module.exports = function() {
         "intro": "string",
         "isbn": "string",
         "name": "string",
-        "picturePath": "https://img.yzcdn.cn/vant/cat.jpeg",
+        "picturePath": "/uploads/s33313181.jpg",
         "press": "string",
         "price": 0,
         "favorite": true,
