@@ -46,6 +46,15 @@ export const queryBookInfoByInstanceId = (instanceId) => {
   });
 }
 
+// 创建图书实例
+export const createInstance = (bookId) => {
+  return axios({
+    url: `/api/books/instances`,
+    method: 'post',
+    data: { bookId }
+  });
+}
+
 // 创建图书
 export const createBook = (params) => {
   return axios({

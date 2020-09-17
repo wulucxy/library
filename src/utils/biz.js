@@ -7,6 +7,13 @@ import { ddConfig } from './ddApi'
 
 const Settings = require('./settings')
 
+// 图书状态
+export const bookStatus = {
+  0: 'UN_SIGN', // 未录入过
+  1: 'SIGNED', // 已录入过，但未创建实例
+  2: 'INSTANCED' // 已录入并且已创建实例
+};
+
 // 获取 access_token
 async function getTokenService(settings) {
   const { appKey, appSecret } = settings

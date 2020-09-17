@@ -3,6 +3,7 @@
     <Form class="addbook-form" ref="formRef" validate-trigger="onSubmit">
       <CellGroup title="图书录入" :border="false">
         <Field
+          :disabled="disabledField"
           ref="nameRef"
           v-model="state.name"
           label="书名"
@@ -10,39 +11,44 @@
           :rules="[{ required: true, message: '请输入书名' }]"
         />
         <Field
+          :disabled="disabledField"
           v-model="state.author"
           label="作者"
           placeholder="请输入作者"
           :rules="[{ required: true, message: '请输入作者' }]"
         />
         <Field
+          :disabled="disabledField"
           v-model="state.press"
           label="出版社"
           placeholder="请输入出版社"
           :rules="[{ required: true, message: '请输入出版社' }]"
         />
         <Field
+          :disabled="disabledField"
           v-model="state.isbn"
           label="ISBN 码"
           placeholder="请输入 ISBN"
           :rules="[{ required: true, message: '请输入 ISBN' }]"
         />
         <Field
+          :disabled="disabledField"
           v-model="state.price"
           label="价格"
           type='number'
           placeholder="请输入价格"
         />
         <Field
+          :disabled="disabledField"
           v-model="state.intro"
           rows="2"
           label="图书描述"
           type="textarea"
           placeholder="请输入图书描述"
         />
-        <Field label="图书封面">
+        <Field label="图书封面" :disabled="disabledField">
           <template #input>
-            <Uploader v-model="state.picturePath" :max-count="1" />
+            <Uploader v-model="fileList" :max-count="1" :disabled="disabledField" />
           </template>
         </Field>
       </CellGroup>
@@ -64,7 +70,7 @@
         <Button
           @click="onSubmit"
           :loading="state.loading"
-          loading-text="加载中..."
+          loading-text="提交中..."
           type='primary'
         >提&nbsp;交</Button>
       </div>
@@ -72,11 +78,12 @@
   </div>
 </template>
 <script>
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { Form, CellGroup, Cell, Icon, Field, Button, Uploader, Toast } from 'vant'
+import { isNil, clone } from 'lodash'
 
 import { utilScan } from '@/utils'
-import { queryISBN, createBook, uploadImg } from '@/api'
+import { queryISBN, createBook, uploadImg, createInstance } from '@/api'
 
 export default {
   name: 'AddBook',
@@ -93,7 +100,7 @@ export default {
     const nameRef = ref(null)
     const formRef = ref(null)
 
-    const intialState = {
+    const initialState = {
       name: '',
       author: '',
       press: '',
@@ -101,10 +108,17 @@ export default {
       isbn: '',
       intro: '',
       picturePath: [],
+      bookId: null,
       loading: false,
     }
 
-    const state = reactive(intialState)
+    const state = reactive(clone(initialState))
+
+    const disabledField = computed(() => !isNil(state.bookId))
+    const fileList = computed(() => state.picturePath.map(d => ({
+      url: d,
+      isImage: true
+    })))
 
     // 智能识别二维码
     const handleDetect = () => {
@@ -122,15 +136,22 @@ export default {
               intro: res.bookIntro,
               picturePath: [res.coverUrl],
             })
-            // todo: ios 无法触发
-            nameRef.value.$el?.querySelector('input').focus()
+            // 对应ISBN 已完成录入，字段不可编辑
+            if (!isNil(res.id)) {
+              Object.assign(state, {
+                bookId: res.id
+              })
+            } else {
+              // todo: ios 无法触发
+              nameRef.value.$el?.querySelector('input').focus()
+            }
           })
         }
       })
     }
 
     const resetForm = () => {
-      Object.assign(state, intialState)
+      Object.assign(state, initialState)
     }
 
     const onSubmit = () => {
@@ -140,34 +161,40 @@ export default {
 
       formRef.value.validate()
         .then(async () => {
-          console.log('state', state.picturePath)
-          const uploadUrl = await uploadImg({url: state.picturePath[0] })
-          console.log('uploadUrl', uploadUrl)
-          createBook({
-            author: state.author,
-            name: state.name,
-            isbn: state.isbn,
-            intro: state.intro,
-            press: state.press,
-            price: Number(state.price),
-            picturePath: uploadUrl,
-          }).then(({ id }) => {
-            // 上传图片
-            resetForm()
-            Toast.success('创建成功')
-        })
-        .catch(err => {
-          console.error(err)
-          throw err
-        })
-        .finally(() => Object.assign(state, { loading: false }))
+          // 如果图书id 已存在，去实例化该图书
+          if (!isNil(state.bookId)) {
+            return createInstance(state.bookId)
+          } else {
+            const uploadUrl = await uploadImg({url: state.picturePath[0] })
+            return createBook({
+              author: state.author,
+              name: state.name,
+              isbn: state.isbn,
+              intro: state.intro,
+              press: state.press,
+              price: Number(state.price),
+              picturePath: uploadUrl,
+            })
+          }  
       })
+      .then(() => {
+        // 上传图片
+        resetForm()
+        Toast.success('创建成功')
+      })
+      .catch(err => {
+        console.error(err)
+        throw err
+      })
+      .finally(() => Object.assign(state, { loading: false }))
     }
 
     return {
       nameRef,
       formRef,
       state,
+      fileList,
+      disabledField,
       handleDetect,
       resetForm,
       onSubmit

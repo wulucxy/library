@@ -27,6 +27,7 @@ module.exports = {
     ],
     "source": "string",
     "title": "string",
+    "id": 0,
     "url": "string"
   },
   "msg": "string"
