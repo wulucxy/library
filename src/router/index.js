@@ -42,6 +42,11 @@ const router = createRouter({
       meta: { title: '我的', showTabBar: true },
       component: Me
     },
+    {
+      path: '/settings',
+      meta: { title: '设置', showTabBar: false },
+      component: () => import('@/views/settings')
+    },
   ],
   scrollBehavior() {
     // always scroll to top

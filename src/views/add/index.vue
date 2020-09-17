@@ -85,6 +85,8 @@ import { isNil, clone } from 'lodash'
 import { utilScan } from '@/utils'
 import { queryISBN, createBook, uploadImg, createInstance } from '@/api'
 
+const CONST = require('@/utils/const')
+
 export default {
   name: 'AddBook',
   components: {
@@ -139,7 +141,8 @@ export default {
             // 对应ISBN 已完成录入，字段不可编辑
             if (!isNil(res.id)) {
               Object.assign(state, {
-                bookId: res.id
+                bookId: res.id,
+                picturePath: [`${CONST.uploadBaseUrl}${res.coverUrl}`],
               })
             } else {
               // todo: ios 无法触发

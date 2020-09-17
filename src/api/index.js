@@ -1,6 +1,14 @@
 import { axios } from '@/utils';
 
 // 推荐新书
+export const getRoleList = () => {
+  return axios({
+    url: '/dd/topapi/role/list',
+    method: 'post'
+  });
+}
+
+// 推荐新书
 export const queryRecommendList = () => {
   return axios({
     url: '/api/books/new',

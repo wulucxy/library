@@ -17,9 +17,10 @@
 <script>
 import { onMounted, reactive, computed } from 'vue'
 import { useStore } from "vuex";
+import { useRouter } from 'vue-router';
 
 import { TabBar, Placeholder } from '@/components'
-import { ddAuth, utilScan, setMenu } from '@/utils'
+import { ddAuth, setMenu } from '@/utils'
 
 import './assets/style/index.scss'
 
@@ -53,6 +54,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter()
 
     const state = reactive({
       userInfo: null
@@ -74,33 +76,35 @@ export default {
         console.error('用户免登失败')
         throw(err)
       }
-            
-      // setMenu({
-      //   backgroundColor: "#ADD8E6",
-      //   textColor: "#ADD8E611",
-      //   items: [
-      //       {
-      //         "id": "1",// 字符串
-      //         "iconId": "scan",//字符串，图标命名
-      //         "text": "扫码"
-      //       },
-      //   ],
-      //   onSuccess: function(data) {
-      //     // 扫码图书
-      //     if(data.id === '1') {
-      //       utilScan({
-      //         type: 'barCode',
-      //         onSuccess: (data) => {
-      //           // 图书二维码同步给后端
-      //           console.log('data2', data)
-      //         }
-      //       })
-      //     }
-      //   },
-      //   onFail: function(err) {
-      //     console.log('err', err)
-      //   }
-      // })
+
+      const isAdmin = (state.userInfo.roles || []).filter(role => {
+        return role.name.includes('管理员')
+      }).length > 0
+
+      if(isAdmin) {
+        setMenu({
+          backgroundColor: "#ADD8E6",
+          textColor: "#ADD8E611",
+          items: [
+              {
+                "id": "1",// 字符串
+                "iconId": "setting-o",//字符串，图标命名
+                "text": "设置"
+              },
+          ],
+          onSuccess: function(data) {
+            // 设置页面
+            if(data.id === '1') {
+              router.push({
+                path: '/settings',
+              })
+            }
+          },
+          onFail: function(err) {
+            console.log('err', err)
+          }
+        })
+      }
     })
 
     return {

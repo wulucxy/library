@@ -68,7 +68,7 @@ export default {
     Icon,
     List,
   },
-  setup (props){
+  setup (){
     const searchRef = ref(null)
     const router = useRouter()
 
@@ -130,7 +130,7 @@ export default {
       handleSearch(item)
     }
 
-    const handleItemClick = (book, event) => {
+    const handleItemClick = (book) => {
       router.push({
         path: '/detail',
         query: { id: book.id }
@@ -174,5 +174,6 @@ export default {
 <style lang="scss">
   .search-page{
     min-height: 100vh;
+    background-color: #fff;
   }
 </style>

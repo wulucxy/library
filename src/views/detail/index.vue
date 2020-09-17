@@ -50,7 +50,7 @@ export default {
     Button,
     Borrow,
   },
-  setup (props){
+  setup (){
     const route = useRoute()
 
     const bookId = Number(route.query.id)
@@ -126,6 +126,7 @@ export default {
 @import '@/assets/style/function';
 .book-detail{
   min-height: 100vh;
+  background-color: #fff;
 }
 .book-content{
   margin: 0 rem(28);
