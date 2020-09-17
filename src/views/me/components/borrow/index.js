@@ -8,7 +8,7 @@ const Borrow = (props) => {
       <Empty description="暂无借阅记录" />
     )
   return (
-    <div>
+    <div class="content-list">
       { books.map(book => {
         return (
           <div key={book.id}>

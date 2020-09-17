@@ -1,45 +1,43 @@
 <template>
   <List
-    v-model="state.loading"
+    v-model:loading="state.loading"
     :finished="finished"
-    class="search-list"
+    class="rank-list"
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <BookInfoCell
-      v-for="book in data"
+    <Item
+      v-for="(book, index) in data"
       :key="book.id"
+      :index="index"
       :book="book"
       :handleItemClick="handleBookClick"
-      :handleFav="handleFav"
     />
   </List>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { List } from 'vant'
 import { useRouter } from 'vue-router'
 
-import { BookInfoCell }  from '@/components'
+import Item from './item'
 
 export default {
-  name: 'SearchResult',
+  name: 'Rank',
   components: {
     List,
-    BookInfoCell
+    Item
   },
   props: {
     loading: Boolean,
     finished: Boolean,
-    updateBook: Function,
+    onLoad: Function,
     data: {
-      type: Array,
-      default: () => ([])
+      type: Object,
+      default: () => ({})
     }
   },
   setup (props){
-    // eslint-disable-next-line
-    const { updateBook } = props
     const router = useRouter()
     const state = reactive({
       loading: props.loading,
@@ -52,23 +50,15 @@ export default {
       })
     }
 
-    const handleFav = (book) => {
-      updateBook(book, {
-        favorite: !book.favorite
-      })
-    }
-
-    const onLoad = () => {}
+    watch(() => props.loading, (next) => {
+      state.loading = next
+    })
 
     return {
       state,
-      onLoad,
       handleBookClick,
-      handleFav,
     }
   }
 }
 
-
 </script>
-

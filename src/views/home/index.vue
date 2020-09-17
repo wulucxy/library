@@ -32,7 +32,14 @@
             />
           </PullRefresh>
         </Tab>
-        <Tab name='rank' title="借阅排行">2</Tab>
+        <Tab name='rank' title="借阅排行">
+          <Rank
+            :data="state.rank.data"
+            :loading="state.rank.loading"
+            :finished="state.rank.finished"
+            :onLoad="onLoad"
+          />
+        </Tab>
       </Tabs>
     </div>
     <Borrow
@@ -49,8 +56,8 @@ import { useRouter } from 'vue-router'
 import { CellGroup, Search, Tabs, Tab, Button, PullRefresh } from 'vant'
 
 import { Borrow } from '@/components'
-import { Recommend } from './components'
-import { queryRecommendList } from '@/api'
+import { Recommend, Rank } from './components'
+import { queryRecommendList, queryHotBooks } from '@/api'
 import { utilScan } from '@/utils'
 import CONST from '@/utils/const'
 
@@ -64,6 +71,7 @@ export default {
     Tabs,
     Tab,
     Recommend,
+    Rank,
     Borrow
   },
   setup (){
@@ -71,7 +79,8 @@ export default {
 
     // 请求 map
     const requestMap = {
-      recommend: queryRecommendList
+      recommend: queryRecommendList,
+      rank: queryHotBooks,
     }
 
     const state = reactive({
@@ -97,7 +106,9 @@ export default {
     }
 
     const handleTabChange = (active) => {
-      console.log('active', active)
+      Object.assign(state, {
+        activeTab: active
+      })
     }
 
     // 更新全部
@@ -110,6 +121,7 @@ export default {
 
     const onLoad = () => {
       const request = requestMap[state.activeTab]
+      console.log('====onload', state.activeTab, request)
       updateState(state.activeTab, {
         loading: true,
       })

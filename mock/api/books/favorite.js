@@ -13,6 +13,7 @@ module.exports = function() {
         "picturePath": "string",
         "press": "string",
         "price": 0,
+        "favorite": true,
         "updateTime": "2020-09-14T07:11:25.593Z",
         "updateUser": "string"
       }

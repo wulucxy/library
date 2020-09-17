@@ -89,6 +89,14 @@ export const queryBookInfo = (bookId) => {
   });
 }
 
+// 图书排行
+export const queryHotBooks = () => {
+  return axios({
+    url: `/api/books/hot`,
+    method: 'get'
+  })
+}
+
 // 查询我借阅的图书
 export const queryBorrowList = () => {
   return axios({
