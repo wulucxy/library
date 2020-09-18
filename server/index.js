@@ -13,11 +13,14 @@ const path = require('path');
 const util = require('util');
 
 const axiosMiddleware = require('./middleware/axios')
+const errorMiddleware = require('./middleware/error')
 const router = require('./router')
 
 const readFile = util.promisify(fs.readFile);
 
 const PORT = process.env.PORT || 3000
+
+app.use(errorMiddleware())
 
 app.use(proxy('/dd', {
   target: 'https://oapi.dingtalk.com',

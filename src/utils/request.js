@@ -56,6 +56,8 @@ service.interceptors.request.use(
       // 钉钉接口
       const parsed = addSearchParam(config.url, 'access_token', token)
       config.url = parsed
+    } else if(/^(\/)?node/.test(config.url)){
+      // node 入口
     }
     config.headers['Content-Type'] = 'application/json';
     return config;

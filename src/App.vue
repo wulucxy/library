@@ -88,7 +88,7 @@ export default {
           items: [
               {
                 "id": "1",// 字符串
-                "iconId": "user",//字符串，图标命名
+                "iconId": "personal",//字符串，图标命名
                 "text": "图书管理"
               },
           ],

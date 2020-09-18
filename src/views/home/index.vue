@@ -142,7 +142,6 @@ export default {
 
     const onLoad = () => {
       const request = requestMap[state.activeTab]
-      console.log('====onload', state.activeTab, request)
       updateState(state.activeTab, {
         loading: true,
       })

@@ -1,3 +1,3 @@
 module.exports = {
-  apiPrefix: '/library'
+  apiPrefix: '/node',
 }

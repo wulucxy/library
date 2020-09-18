@@ -125,7 +125,7 @@ export const queryISBN = (isbn) => {
 // 上传图片
 export const uploadImg = data => {
   return axios({
-    url: `/library/upload`,
+    url: `/node/upload`,
     method: 'post',
     data
   });
