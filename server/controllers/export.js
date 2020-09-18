@@ -18,7 +18,6 @@ module.exports = async ctx => {
 
   const instances = await bookService.getInstanceInfo({ ids })
   const mapper = instance => {
-    const createCanvas = () => {}
     const canvas = createCanvas();
     const qsTxt = `${instance.strId}\n${instance.isbn}`
     JsBarcode(canvas, qsTxt, {
@@ -28,7 +27,7 @@ module.exports = async ctx => {
     fs.writeFileSync(path.join(uploadsPath, `${instance.strId}.png`), buf);
   };
  
-  const result = await pMap(instances, mapper, {concurrency: 5});
+  await pMap(instances, mapper, {concurrency: 5});
 
   const files = fs.readdirSync(uploadsPath);
 
