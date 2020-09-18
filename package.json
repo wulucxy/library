@@ -10,12 +10,13 @@
     "serve:prod": "node server/index.js"
   },
   "dependencies": {
+    "adm-zip": "^0.4.16",
     "app-module-path": "^2.2.0",
     "axios": "^0.20.0",
     "bluebird": "^3.7.2",
     "classnames": "^2.2.6",
-    "core-js": "^3.6.5",
     "canvas": "^2.6.1",
+    "core-js": "^3.6.5",
     "crypto-js": "^4.0.0",
     "date-fns": "^2.16.1",
     "dingtalk-jsapi": "^2.12.2",
