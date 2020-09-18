@@ -41,10 +41,10 @@ module.exports = async ctx => {
     });
 
   const buffer = zip.toBuffer();
-
+  
   ctx.set({
     'Content-type': 'application/zip',
-    'Content-Disposition': `attachment; filename=二维码`
+    'Content-Disposition': `attachment; filename=barcode.zip`
   })
 
   ctx.body = buffer
