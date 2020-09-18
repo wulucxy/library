@@ -40,8 +40,8 @@
 import { reactive, ref } from 'vue'
 import { Form, CellGroup, Cell, Icon, Field, Button, Toast } from 'vant'
 
-import { utilScan } from '@/utils'
-import { queryISBN, purchaseBook } from '@/api'
+import { ISBNScan } from '@/utils'
+import { purchaseBook } from '@/api'
 
 export default {
   name: 'Apply',
@@ -65,22 +65,14 @@ export default {
 
     // 智能识别二维码
     const handleDetect = () => {
-      utilScan({
-        type: 'barCode',
-        onSuccess: (data) => {
-          // 图书二维码同步给后端
-          queryISBN(data.text).then(res => {
-            // todo: 无法识别
-            if(!res || !res.isbn) {
-              throw new Error('该书暂无法识别，请手动录入')
-            }
-            Object.assign(state, {
-              author: res.bookInfo['作者'],
-              name: res.title,
-            })
-            // todo: ios 无法触发
-            nameRef.value.$el?.querySelector('input').focus()
+      ISBNScan({
+        onSuccess: (res) => {
+          Object.assign(state, {
+            author: res.bookInfo['作者'],
+            name: res.title,
           })
+          // todo: ios 无法触发
+          nameRef.value.$el?.querySelector('input').focus()
         }
       })
     }

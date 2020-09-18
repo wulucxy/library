@@ -64,7 +64,7 @@ import { isNil } from 'lodash'
 import { Borrow } from '@/components'
 import { Recommend, Rank } from './components'
 import { queryRecommendList, queryHotBooks, favBook } from '@/api'
-import { utilScan } from '@/utils'
+import { barcodeScan } from '@/utils'
 import CONST from '@/utils/const'
 
 export default {
@@ -181,12 +181,11 @@ export default {
 
     // 借书
     const toBorrow = () => {
-      utilScan({
-        type: 'barCode',
-        onSuccess: (data) => {
+      barcodeScan({
+        onSuccess: (text) => {
           // 图书二维码同步给后端
           Object.assign(state, {
-            bookInstanceId: data.text
+            bookInstanceId: text
           })
         }
       })

@@ -98,8 +98,8 @@ import { reactive, ref, computed } from 'vue'
 import { Form, CellGroup, Cell, Icon, Field, Button, Uploader, Toast } from 'vant'
 import { isNil, clone } from 'lodash'
 
-import { utilScan } from '@/utils'
-import { queryISBN, createBook, uploadImg, createInstance } from '@/api'
+import { ISBNScan } from '@/utils'
+import { createBook, uploadImg, createInstance } from '@/api'
 
 const CONST = require('@/utils/const')
 
@@ -142,36 +142,29 @@ export default {
 
     // 智能识别二维码
     const handleDetect = () => {
-      utilScan({
-        type: 'barCode',
-        onSuccess: (data) => {
-          // 图书二维码同步给后端
-          queryISBN(data.text).then(res => {
-            if(!res || !res.isbn) {
-              throw new Error('该书暂无法识别，请手动录入')
-            }
-            Object.assign(state, {
-              author: res.bookInfo['作者'],
-              name: res.title,
-              press: res.bookInfo['出版社'],
-              isbn: res.isbn,
-              price: parseFloat(res.bookInfo['定价']) || res.bookInfo['定价'],
-              intro: res.bookIntro,
-              authorIntro: res.authorIntro,
-              catalog: res.catalog,
-              picturePath: [res.coverUrl],
-            })
-            // 对应ISBN 已完成录入，字段不可编辑
-            if (!isNil(res.id)) {
-              Object.assign(state, {
-                bookId: res.id,
-                picturePath: [`${CONST.uploadBaseUrl}${res.coverUrl}`],
-              })
-            } else {
-              // todo: ios 无法触发
-              nameRef.value.$el?.querySelector('input').focus()
-            }
+      ISBNScan({
+        onSuccess: (res) => {
+          Object.assign(state, {
+            author: res.bookInfo['作者'],
+            name: res.title,
+            press: res.bookInfo['出版社'],
+            isbn: res.isbn,
+            price: parseFloat(res.bookInfo['定价']) || res.bookInfo['定价'],
+            intro: res.bookIntro,
+            authorIntro: res.authorIntro,
+            catalog: res.catalog,
+            picturePath: [res.coverUrl],
           })
+          // 对应ISBN 已完成录入，字段不可编辑
+          if (!isNil(res.id)) {
+            Object.assign(state, {
+              bookId: res.id,
+              picturePath: [`${CONST.uploadBaseUrl}${res.coverUrl}`],
+            })
+          } else {
+            // todo: ios 无法触发
+            nameRef.value.$el?.querySelector('input').focus()
+          }
         }
       })
     }

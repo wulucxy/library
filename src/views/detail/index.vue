@@ -40,7 +40,7 @@ import { useRoute } from 'vue-router'
 import { Button } from 'vant'
 
 import { Borrow, BookInfoCell, TextCollapse, Placeholder } from '@/components'
-import { utilScan } from '@/utils'
+import { barcodeScan } from '@/utils'
 import { queryBookInfo, favBook } from '@/api'
 
 export default {
@@ -91,12 +91,11 @@ export default {
 
     // 借书
     const handleBorrow = () => {
-      utilScan({
-        type: 'barCode',
-        onSuccess: (data) => {
+      barcodeScan({
+        onSuccess: (text) => {
           // 图书二维码同步给后端
           Object.assign(state, {
-            bookInstanceId: data.text
+            bookInstanceId: text
           })
         }
       })
