@@ -31,14 +31,12 @@ module.exports = async ctx => {
 
   const files = fs.readdirSync(uploadsPath);
 
-  console.log('===files===', files)
   files
     .filter(file => {
       const extension = path.extname(file);
       return blacklist.indexOf(extension) === -1;
     })
     .forEach(file => {
-      console.log('===file==', file)
       zip.addLocalFile(uploadsPath + '/' + file);
     });
 
