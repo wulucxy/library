@@ -55,3 +55,8 @@ export default {
 }
 
 </script>
+<style>
+  .rank-list{
+    min-height: 50vh;
+  }
+</style>

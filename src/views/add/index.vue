@@ -147,7 +147,7 @@ export default {
         onSuccess: (data) => {
           // 图书二维码同步给后端
           queryISBN(data.text).then(res => {
-            if(!res) {
+            if(!res || !res.isbn) {
               throw new Error('该书暂无法识别，请手动录入')
             }
             Object.assign(state, {

@@ -1,6 +1,6 @@
 <template>
   <BookCell
-    :clickable="true"
+    :clickable="clickable"
     :handleClick="handleItemClick"
     :handleFav="handleFav"
     :book="book"
@@ -32,6 +32,10 @@ export default {
     handleItemClick: Function,
     handleFav: Function,
     book: Object,
+    clickable: {
+      type: Boolean,
+      default: true
+    }
   },
   components: {
     BookCell,

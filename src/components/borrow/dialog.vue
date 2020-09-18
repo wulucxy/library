@@ -50,6 +50,7 @@ export default {
       props.onOk && props.onOk(props.book)
     }
 
+    // eslint-disable-next-line
     const handleBeforeClose = (action, done) => {
       // todo
     }

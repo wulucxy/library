@@ -238,7 +238,6 @@ export default {
     min-height: 100vh;
   }
   .cell-list-wrapper{
-    background-color: #fff;
     min-height: 66.7vh;
   }
   .card-large{

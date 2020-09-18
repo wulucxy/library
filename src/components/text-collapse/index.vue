@@ -26,7 +26,7 @@ export default {
   props: {
     title: String,
   },
-  setup (props){
+  setup (){
     const boxRef = ref(null)
     const innerBoxRef = ref(null)
 

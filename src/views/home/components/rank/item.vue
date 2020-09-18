@@ -2,9 +2,11 @@
   <div class='flex flex-vertical-align rank-item'>
     <div class="rank-index" :class="rankClass">{{ randIndex }}.</div>
     <BookInfoCell
+      :clickable=false
       :book="book"
       :handleItemClick="handleItemClick"
       :handleFav="handleFav"
+      class="f1"
     />
     <div class="rank-count">{{ book.count }}</div>
   </div>
@@ -48,6 +50,13 @@
 @import '@/assets/style/function';
   .rank-item{
     padding: 0 rem(24) 0 rem(16);
+    background-color: #fff;
+    &:active{
+      background-color: #f2f3f5;
+      .book-cell{
+        background-color: #f2f3f5;
+      }
+    }
     .rank-index{
       font-weight: bold;
       font-style: italic;
