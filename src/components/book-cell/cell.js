@@ -27,7 +27,7 @@ const BookCell = (props, ctx) => {
   return (
     <section class={classNames} onClick={handleCellClick}>
       <Image style={{
-        width: "20vw",
+        flex: "0 0 20vw",
         height: "28vw"
       }} fit='contain' src={imageUrl} />
       <div class='f1 media-body flex flex-column'>

@@ -21,7 +21,7 @@
 </template>
 <script>
 import { reactive, onMounted } from 'vue'
-import { Tabs, Tab } from 'vant'
+import { Tabs, Tab, Notify } from 'vant'
 import Promise from 'bluebird'
 import { useRouter } from 'vue-router'
 
@@ -51,10 +51,11 @@ export default {
       // 收藏图书
       favBook(book.id, !book.favorite).then(() => {
         queryFavorList().then(res => {
-          console.log('res', res)
           Object.assign(state, {
             favorList: res,
           })
+          const msg = book.favorite ? '取消收藏成功' : '收藏成功'
+          Notify({ type: 'success', message: msg, duration: 1000 });
         })
       })
     }
@@ -63,7 +64,6 @@ export default {
       Object.assign(state, {
         loading: true
       })
-      // todo: code
       Promise.all(
         [queryBorrowList, queryFavorList].map(request => request()))
       .then(res => {
