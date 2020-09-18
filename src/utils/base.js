@@ -21,3 +21,10 @@ export const formatDateTime = (datetime, formatter = 'yyyy-MM-dd HH:mm:ss') => {
   const input = isDate(datetime) ? datetime : parseISO(datetime);
   return format(input, formatter);
 };
+
+// 小于 9 数字添加 0 前缀
+export const leadingZero = (num, targetLength = 2, char = '0') => {
+  const prefix = num < 0 ? '-' : '';
+  const number = Math.abs(parseFloat(num));
+  return prefix + String(number).padStart(targetLength, char);
+};

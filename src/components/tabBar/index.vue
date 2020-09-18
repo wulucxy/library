@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div style="height:50px; pointer-events: none;"></div>
+    <div style="height:50px; pointer-events: none; background-color: #fff;"></div>
     <Tabbar
       v-model="state.active"
       :active-color="tabBarActiveColor"
+      class='fixed-bottom'
     >
       <TabbarItem 
         v-for="(item,index) of data"

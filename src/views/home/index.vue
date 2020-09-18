@@ -27,18 +27,23 @@
               :data="state.recommend.data"
               :loading="state.recommend.loading"
               :finished="state.recommend.finished"
-              :updateBook="updateBook"
+              :handleItemClick="handleItemClick"
+              :handleFav="handleFav"
               :onLoad="onLoad"
             />
           </PullRefresh>
         </Tab>
         <Tab name='rank' title="借阅排行">
-          <Rank
-            :data="state.rank.data"
-            :loading="state.rank.loading"
-            :finished="state.rank.finished"
-            :onLoad="onLoad"
-          />
+          <PullRefresh v-model="state.refreshing" @refresh="onRefresh">
+            <Rank
+              :data="state.rank.data"
+              :loading="state.rank.loading"
+              :finished="state.rank.finished"
+              :handleItemClick="handleItemClick"
+              :handleFav="handleFav"
+              :onLoad="onLoad"
+            />
+          </PullRefresh>
         </Tab>
       </Tabs>
     </div>
@@ -54,10 +59,11 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { CellGroup, Search, Tabs, Tab, Button, PullRefresh } from 'vant'
+import { isNil } from 'lodash'
 
 import { Borrow } from '@/components'
 import { Recommend, Rank } from './components'
-import { queryRecommendList, queryHotBooks } from '@/api'
+import { queryRecommendList, queryHotBooks, favBook } from '@/api'
 import { utilScan } from '@/utils'
 import CONST from '@/utils/const'
 
@@ -119,6 +125,21 @@ export default {
       })
     }
 
+    const handleItemClick = (book) => {
+      router.push({
+        path: '/detail',
+        query: { id: book.id }
+      })
+    }
+
+    const handleFav = (book) => {
+      updateBook(book, {
+        favorite: !book.favorite
+      })
+      // 收藏图书
+      favBook(book.id, !book.favorite)
+    }
+
     const onLoad = () => {
       const request = requestMap[state.activeTab]
       console.log('====onload', state.activeTab, request)
@@ -138,8 +159,9 @@ export default {
         setTimeout(() => {
           updateState(state.activeTab, {
             loading: false,
-            finished: res.pages < CONST.pageSize,
-            data: res.records
+            // 不做分页，或当前页面返回值小于 pageSize
+            finished: isNil(res.pages) || res.pages < CONST.pageSize,
+            data: isNil(res.pages) ? res : res.records
           })
         }, 800)
       })
@@ -198,6 +220,8 @@ export default {
       state,
       onLoad,
       updateState,
+      handleItemClick,
+      handleFav,
       updateBook,
       onFocus,
       onRefresh,
@@ -210,6 +234,9 @@ export default {
 }
 </script>
 <style scoped>
+  .home-page{
+    min-height: 100vh;
+  }
   .cell-list-wrapper{
     background-color: #fff;
     min-height: 66.7vh;
@@ -222,5 +249,6 @@ export default {
   .btn-1{
     height: 44px;
     border-radius: 22px;
+    background: linear-gradient(136deg, #FFD27E 0%, #FCC53A 100%);
   }
 </style>

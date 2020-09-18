@@ -15,11 +15,6 @@
           placeholder="请输入作者"
           :rules="[{ required: true, message: '请输入作者' }]"
         />
-        <!-- <Field label="上传图片" v-model="state.picturePath">
-          <template #input>
-            <Uploader />
-          </template>
-        </Field> -->
       </CellGroup>
       <CellGroup title="智能识别">
         <Cell
@@ -43,9 +38,8 @@
 </template>
 <script>
 import { reactive, ref } from 'vue'
-import { Form, CellGroup, Cell, Icon, Field, Button, Uploader, Toast } from 'vant'
+import { Form, CellGroup, Cell, Icon, Field, Button, Toast } from 'vant'
 
-import { Card } from '@/components'
 import { utilScan } from '@/utils'
 import { queryISBN, purchaseBook } from '@/api'
 
@@ -54,10 +48,8 @@ export default {
   components: {
     Form,
     CellGroup,
-    Card,
     Field,
     Button,
-    Uploader,
     Icon,
     Cell
   },
@@ -78,6 +70,10 @@ export default {
         onSuccess: (data) => {
           // 图书二维码同步给后端
           queryISBN(data.text).then(res => {
+            // todo: 无法识别
+            if(!res) {
+              throw new Error('该书暂无法识别，请手动录入')
+            }
             Object.assign(state, {
               author: res.bookInfo['作者'],
               name: res.title,
@@ -125,6 +121,7 @@ export default {
 <style lang="scss" scoped>
   .apply-page{
     background-color: #f7f8fa;
+    min-height: 100vh;
   }
   .book-icon{
     font-size: 24px;

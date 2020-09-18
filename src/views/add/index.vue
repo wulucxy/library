@@ -46,6 +46,22 @@
           type="textarea"
           placeholder="请输入图书描述"
         />
+        <Field
+          :disabled="disabledField"
+          v-model="state.authorIntro"
+          rows="1"
+          label="作者简介"
+          type="textarea"
+          placeholder="请输入作者简介"
+        />
+        <Field
+          :disabled="disabledField"
+          v-model="state.catalog"
+          rows="1"
+          label="目录简介"
+          type="textarea"
+          placeholder="请输入目录简介"
+        />
         <Field label="图书封面" :disabled="disabledField">
           <template #input>
             <Uploader v-model="fileList" :max-count="1" :disabled="disabledField" />
@@ -109,6 +125,8 @@ export default {
       price: undefined,
       isbn: '',
       intro: '',
+      authorIntro: '',
+      catalog: '',
       picturePath: [],
       bookId: null,
       loading: false,
@@ -129,13 +147,18 @@ export default {
         onSuccess: (data) => {
           // 图书二维码同步给后端
           queryISBN(data.text).then(res => {
+            if(!res) {
+              throw new Error('该书暂无法识别，请手动录入')
+            }
             Object.assign(state, {
               author: res.bookInfo['作者'],
               name: res.title,
               press: res.bookInfo['出版社'],
               isbn: res.isbn,
-              price: parseFloat(res.bookInfo['定价']),
+              price: parseFloat(res.bookInfo['定价']) || res.bookInfo['定价'],
               intro: res.bookIntro,
+              authorIntro: res.authorIntro,
+              catalog: res.catalog,
               picturePath: [res.coverUrl],
             })
             // 对应ISBN 已完成录入，字段不可编辑
@@ -174,6 +197,8 @@ export default {
               name: state.name,
               isbn: state.isbn,
               intro: state.intro,
+              authorIntro: state.authorIntro,
+              catalog: state.catalog,
               press: state.press,
               price: Number(state.price),
               picturePath: uploadUrl,

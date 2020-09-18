@@ -9,6 +9,8 @@
         />
         <div class="book-content">
           <TextCollapse title="图书简介">{{state.bookInfo.intro}}</TextCollapse>
+          <TextCollapse title="作者简介" v-if="state.bookInfo.authorIntro">{{state.bookInfo.authorIntro}}</TextCollapse>
+          <TextCollapse title="目录" v-if="state.bookInfo.catalog">{{state.bookInfo.catalog}}</TextCollapse>
         </div>
       </div>
       <Placeholder v-else-if="state.loading" />

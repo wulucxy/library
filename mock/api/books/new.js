@@ -24,7 +24,7 @@ module.exports = function() {
         "count": 0,
         "createTime": "2020-09-13T02:30:48.816Z",
         "createUser": "string",
-        "id": 1,
+        "id": 2,
         "intro": "string",
         "isbn": "string",
         "name": "string",
