@@ -20,6 +20,7 @@ module.exports = async ctx => {
   const mapper = instance => {
     const canvas = createCanvas();
     const qsTxt = `${instance.strId}\n${instance.isbn}`
+    console.log('===qsTxt===', qsTxt)
     JsBarcode(canvas, qsTxt, {
       displayValue: true
     });
@@ -37,6 +38,7 @@ module.exports = async ctx => {
       return blacklist.indexOf(extension) > -1;
     })
     .forEach(file => {
+      console.log('===file==', file)
       zip.addLocalFile(uploadsPath + '/' + file);
     });
 
