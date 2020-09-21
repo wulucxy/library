@@ -5,14 +5,17 @@ const querystring = require('querystring')
 
 const request = () => {
   let instance = axios.create({
-    baseURL: 'http://10.5.29.82:7080',
     httpAgent: new http.Agent({ keepAlive: true }),
     paramsSerializer: function(params) {
       return querystring.stringify(params)
     }
   })
   instance.interceptors.request.use((config) => {
-    // todo: 
+    if (/^(\/)?api/.test(config.url)) {
+      config.baseURL = 'http://10.5.29.82:7080';
+    }
+    // todo:
+    console.log('config', config);
     return config
   })
   instance.interceptors.response.use((response) => {

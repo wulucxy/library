@@ -119,6 +119,10 @@ export default {
       Object.assign(state, {
         activeTab: active
       })
+      // 每次切到借阅排行的时候，默认请求
+      if(active === 'rank') {
+        onLoad()
+      }
     }
 
     // 更新全部
