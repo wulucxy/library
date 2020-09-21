@@ -35,7 +35,10 @@
         </Tab>
         <Tab name='rank' title="借阅排行">
           <PullRefresh v-model="state.refreshing" @refresh="onRefresh">
+            <Empty
+              v-if="state.rank.data.length === 0 && state.rank.loading === false" description="暂无借阅记录" />
             <Rank
+              v-else
               :data="state.rank.data"
               :loading="state.rank.loading"
               :finished="state.rank.finished"
@@ -58,7 +61,7 @@
 <script>
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { CellGroup, Search, Tabs, Tab, Button, PullRefresh } from 'vant'
+import { CellGroup, Search, Tabs, Tab, Button, PullRefresh, Empty } from 'vant'
 import { isNil } from 'lodash'
 
 import { Borrow } from '@/components'
@@ -78,7 +81,8 @@ export default {
     Tab,
     Recommend,
     Rank,
-    Borrow
+    Borrow,
+    Empty
   },
   setup (){
     const router = useRouter()

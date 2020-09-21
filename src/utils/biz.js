@@ -1,12 +1,13 @@
 import CryptoJS from 'crypto-js';
 import * as dd from "dingtalk-jsapi"; // 钉钉JSAPI
+import { Toast } from 'vant'
 
 import store from '@/store';
 import axios from './request';
 import { ddConfig, utilScan } from './ddApi'
 import { queryISBN } from '@/api'
 
-const ISBN = require('isbn-validate')
+const ISBN = require('isbn-util')
 const Settings = require('./settings')
 
 // 图书状态
@@ -22,13 +23,15 @@ export const ISBNScan = (options = {}) => {
     type: 'barCode',
     onSuccess: (data) => {
       // 过滤非标准数据
-      if (!ISBN.Validate(data.text)) {
-        throw new Error('该书 ISBN 码异常')
+      if (!ISBN.validate(data.text)) {
+        Toast('该书 ISBN 码异常')
+        return
       }
       // 图书二维码同步给后端
       queryISBN(data.text).then(res => {
         if(!res || !res.isbn) {
-          throw new Error('该书暂无法识别，请手动录入')
+          Toast('该书暂无法识别，请手动录入')
+          return
         }
 
         options.onSuccess && options.onSuccess(res)
@@ -44,9 +47,11 @@ export const barcodeScan = (options = {}) => {
     onSuccess: (data) => {
       // 过滤非标准数据
       if (!data?.text){
-        throw new Error('该书无法识别，请联系管理员')
+        Toast('该书无法识别，请联系管理员')
+        return
       } else if (data.text.split(/\n/).length !== 2) {
-        throw new Error('该书未录入系统，无法借阅，请联系管理员')
+        Toast('该书未录入系统，无法借阅，请联系管理员')
+        return
       }
       const __text = data.text.split(/\n/)[0]
       // removing leading zero
