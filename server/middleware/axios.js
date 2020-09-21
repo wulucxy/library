@@ -26,7 +26,7 @@ const request = () => {
       }
       return res.data
     }
-    return res
+    return response
   })
   return async (ctx, next) => {
     ctx.axios = instance
