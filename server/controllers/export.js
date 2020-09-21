@@ -14,6 +14,8 @@ module.exports = async ctx => {
   const { ids } = ctx.query
   const uploadsPath = path.join(__dirname, '../tmp')
   fs.ensureDirSync(uploadsPath)
+  fs.emptyDirSync(uploadsPath)
+
   const bookService = new BookService(ctx)
 
   const instances = await bookService.getInstanceInfo({ ids })

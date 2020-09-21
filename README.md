@@ -1,24 +1,9 @@
-# library
+# 之江图书馆借阅应用
 
-## Project setup
-```
-yarn install
-```
+## api
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+### 1. 生成图书二维码
 
-### Compiles and minifies for production
-```
-yarn build
-```
+-接口：http://10.5.29.82:8081/node/instances/export
 
-### Lints and fixes files
-```
-yarn lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
