@@ -20,8 +20,10 @@ const request = () => {
   })
   instance.interceptors.response.use((response) => {
     const res = response.data;
-    if (res.code !== 200) {
-      return Promise.reject(new Error('请求异常'))
+    if (/^(\/)?api/.test(response.config.url)) {
+      if (res.code !== 200) {
+        return Promise.reject(new Error('请求异常'))
+      }
     }
     return res.data
   })
