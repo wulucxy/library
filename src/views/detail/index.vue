@@ -95,7 +95,7 @@ export default {
         onSuccess: (text) => {
           // 图书二维码同步给后端
           Object.assign(state, {
-            bookInstanceId: text
+            bookInstanceId: Number(text)
           })
         }
       })

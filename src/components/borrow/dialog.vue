@@ -16,7 +16,7 @@
             <div class="divider-line van-hairline--top divider-right"></div>
           </div>
           <div class="tip-txt f12 primary-txt">
-            注：借阅期限30天，可续借1次 14天
+            注：借阅期限30天
           </div>
         </div>
       </slot>
@@ -37,6 +37,7 @@ export default {
       default: '确认借阅'
     },
     onCancel: Function,
+    bookInstanceId: Number,
     onOk: Function,
     onClose: Function,
     book: Object,
@@ -47,7 +48,7 @@ export default {
     })
 
     const handleOk = () => {
-      props.onOk && props.onOk(props.book)
+      props.onOk && props.onOk(props.bookInstanceId, props.book)
     }
 
     // eslint-disable-next-line

@@ -3,6 +3,7 @@
   <BorrowDialog
     :show="state.showDialog"
     :book="state.bookInfo"
+    :bookInstanceId="bookInstanceId"
     :onCancel="handleCancel"
     :onOk="handleConfirm"
     :onClose="onClose"
@@ -10,6 +11,7 @@
 </template>
 <script>
 import { reactive, onMounted } from 'vue'
+import { Toast } from 'vant'
 
 import { queryBookInfoByInstanceId, borrowBook } from '@/api'
 import BorrowDialog from './dialog'
@@ -20,7 +22,7 @@ export default {
     BorrowDialog,
   },
   props: {
-    bookInstanceId: String,
+    bookInstanceId: Number,
     onClose: Function,
     resetInstance: Function,
   },
@@ -42,11 +44,14 @@ export default {
       toggleDialog()
     }
 
-    const handleConfirm = () => {
+    const handleConfirm = (bookInstanceId) => {
       borrowBook({
-        bookInstanceId: state.bookInfo.bookInstanceId
+        bookInstanceId
       }).then(() => {
         toggleDialog()
+        setTimeout(() => {
+          Toast.success('借阅成功')
+        }, 200)
       })
     }
 
