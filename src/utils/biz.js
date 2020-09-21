@@ -24,12 +24,14 @@ export const ISBNScan = (options = {}) => {
       // 过滤非标准数据
       // 简单判断文字长度
       if (![13, 10].includes(data.text.length)) {
+        Toast.clear()
         Toast('该书 ISBN 码异常')
         return
       }
       // 图书二维码同步给后端
       queryISBN(data.text).then(res => {
         if(!res || !res.isbn) {
+          Toast.clear()
           Toast('该书暂无法识别，请手动录入')
           return
         }
@@ -51,9 +53,11 @@ export const barcodeScan = (options = {}) => {
     onSuccess: (data) => {
       // 过滤非标准数据
       if (!data?.text){
+        Toast.clear()
         Toast('该书无法识别，请联系管理员')
         return
       } else if (data.text.split(/\n/).length !== 2) {
+        Toast.clear()
         Toast('该书未录入系统，无法借阅，请联系管理员')
         return
       }
