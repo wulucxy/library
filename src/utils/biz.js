@@ -18,7 +18,7 @@ export const bookStatus = {
 
 // 识别图书 ISBN 码
 export const ISBNScan = (options = {}) => {
-  return utilScan({
+  const settings = {
     type: 'barCode',
     onSuccess: (data) => {
       // 过滤非标准数据
@@ -37,7 +37,11 @@ export const ISBNScan = (options = {}) => {
         options.onSuccess && options.onSuccess(res)
       })
      }
-  })
+  }
+  if(options.onFail) {
+    settings.onFail = options.onFail
+  }
+  return utilScan(settings)
 }
 
 // 识别图书自定义二维码

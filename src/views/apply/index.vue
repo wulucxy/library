@@ -65,14 +65,23 @@ export default {
 
     // 智能识别二维码
     const handleDetect = () => {
+      Toast({
+        message: '自动识别中',
+        duration: 0
+      })
       ISBNScan({
         onSuccess: (res) => {
+          Toast.clear();
           Object.assign(state, {
             author: res.bookInfo['作者'],
             name: res.title,
           })
           // todo: ios 无法触发
           nameRef.value.$el?.querySelector('input').focus()
+        },
+        onFail: err => {
+          Toast.clear();
+          throw err;
         }
       })
     }
