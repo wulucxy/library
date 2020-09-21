@@ -154,12 +154,13 @@ export default {
       ISBNScan({
         onSuccess: (res) => {
           Toast.clear();
+          const bookInfo = res.bookInfo || {}
           Object.assign(state, {
-            author: res.bookInfo['作者'],
+            author: bookInfo['作者'],
             name: res.title,
-            press: res.bookInfo['出版社'],
+            press: bookInfo['出版社'],
             isbn: res.isbn,
-            price: parseFloat(res.bookInfo['定价']) || res.bookInfo['定价'],
+            price: parseFloat(bookInfo['定价']) || bookInfo['定价'],
             intro: res.bookIntro,
             authorIntro: res.authorIntro,
             catalog: res.catalog,

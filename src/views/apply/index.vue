@@ -72,8 +72,9 @@ export default {
       ISBNScan({
         onSuccess: (res) => {
           Toast.clear();
+          const bookInfo = res.bookInfo || {}
           Object.assign(state, {
-            author: res.bookInfo['作者'],
+            author: bookInfo['作者'],
             name: res.title,
           })
           // todo: ios 无法触发
