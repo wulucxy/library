@@ -193,7 +193,7 @@ export default {
               authorIntro: state.authorIntro,
               catalog: state.catalog,
               press: state.press,
-              price: Number(state.price),
+              price: Number(state.price) * 100,
               picturePath: uploadUrl,
             })
           }  

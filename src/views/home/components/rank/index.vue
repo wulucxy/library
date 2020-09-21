@@ -58,5 +58,6 @@ export default {
 <style>
   .rank-list{
     min-height: 50vh;
+    justify-content: space-between;
   }
 </style>

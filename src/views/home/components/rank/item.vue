@@ -46,7 +46,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/assets/style/function';
   .rank-item{
     padding: 0 rem(24) 0 rem(16);
@@ -57,13 +57,18 @@
         background-color: #f2f3f5;
       }
     }
+    .book-cell{
+      max-width: rem(234);
+      .media-body{
+        max-width: calc(100% - 20vw - 16px);
+      }
+    }
     .rank-index{
       font-weight: bold;
       font-style: italic;
       font-size: rem(18);
     }
     .rank-count{
-      margin-left: 10px;
       font-size: rem(20);
       font-weight: bold;
       font-style: italic;
