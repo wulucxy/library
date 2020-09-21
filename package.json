@@ -21,7 +21,6 @@
     "date-fns": "^2.16.1",
     "dingtalk-jsapi": "^2.12.2",
     "fs-extra": "^9.0.1",
-    "isbn-util": "^1.1.0",
     "jsbarcode": "^3.11.0",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",

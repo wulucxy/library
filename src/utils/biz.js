@@ -7,7 +7,6 @@ import axios from './request';
 import { ddConfig, utilScan } from './ddApi'
 import { queryISBN } from '@/api'
 
-const ISBN = require('isbn-util')
 const Settings = require('./settings')
 
 // 图书状态
@@ -23,7 +22,8 @@ export const ISBNScan = (options = {}) => {
     type: 'barCode',
     onSuccess: (data) => {
       // 过滤非标准数据
-      if (!ISBN.validate(data.text)) {
+      // 简单判断文字长度
+      if (![13, 10].includes(data.text.length)) {
         Toast('该书 ISBN 码异常')
         return
       }
