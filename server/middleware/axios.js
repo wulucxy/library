@@ -24,8 +24,9 @@ const request = () => {
       if (res.code !== 200) {
         return Promise.reject(new Error('请求异常'))
       }
+      return res.data
     }
-    return res.data
+    return res
   })
   return async (ctx, next) => {
     ctx.axios = instance
