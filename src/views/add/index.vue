@@ -5,6 +5,7 @@
         <Field
           :disabled="disabledField"
           ref="nameRef"
+          required
           v-model="state.name"
           label="书名"
           placeholder="请输入书名"
@@ -13,6 +14,7 @@
         <Field
           :disabled="disabledField"
           v-model="state.author"
+          required
           label="作者"
           placeholder="请输入作者"
           :rules="[{ required: true, message: '请输入作者' }]"
@@ -20,6 +22,7 @@
         <Field
           :disabled="disabledField"
           v-model="state.press"
+          required
           label="出版社"
           placeholder="请输入出版社"
           :rules="[{ required: true, message: '请输入出版社' }]"
@@ -27,6 +30,7 @@
         <Field
           :disabled="disabledField"
           v-model="state.isbn"
+          required
           label="ISBN 码"
           placeholder="请输入 ISBN"
           :rules="[{ required: true, message: '请输入 ISBN' }]"
@@ -64,7 +68,7 @@
         />
         <Field label="图书封面" :disabled="disabledField">
           <template #input>
-            <Uploader v-model="fileList" :max-count="1" :disabled="disabledField" />
+            <Uploader v-model="state.picturePath" :max-count="1" :disabled="disabledField" />
           </template>
         </Field>
       </CellGroup>
@@ -135,10 +139,11 @@ export default {
     const state = reactive(clone(initialState))
 
     const disabledField = computed(() => !isNil(state.bookId))
-    const fileList = computed(() => state.picturePath.map(d => ({
+    // 根据图片地址生成文件路径
+    const generatefileList = (imgs) => imgs.map(d => ({
       url: d,
       isImage: true
-    })))
+    }))
 
     // 智能识别二维码
     const handleDetect = () => {
@@ -158,13 +163,13 @@ export default {
             intro: res.bookIntro,
             authorIntro: res.authorIntro,
             catalog: res.catalog,
-            picturePath: [res.coverUrl],
+            picturePath: generatefileList([res.coverUrl]),
           })
           // 对应ISBN 已完成录入，字段不可编辑
           if (!isNil(res.id)) {
             Object.assign(state, {
               bookId: res.id,
-              picturePath: [`${CONST.uploadBaseUrl}${res.coverUrl}`],
+              picturePath: generatefileList([`${CONST.uploadBaseUrl}${res.coverUrl}`]),
             })
           } else {
             // todo: ios 无法触发
@@ -223,7 +228,6 @@ export default {
       nameRef,
       formRef,
       state,
-      fileList,
       disabledField,
       handleDetect,
       resetForm,
