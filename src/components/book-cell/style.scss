@@ -10,6 +10,9 @@
     }
   }
   .media-body{
+    max-width: calc(100% - 20vw - 16px);
+  }
+  .media-body{
     margin-left: rem(16);
     align-items: stretch;
   }

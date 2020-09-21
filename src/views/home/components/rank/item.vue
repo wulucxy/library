@@ -15,7 +15,7 @@
   import { computed } from 'vue'
   import cx from 'classnames'
 
-  import { formatDateTime, leadingZero } from '@/utils'
+  import { leadingZero } from '@/utils'
   import { BookInfoCell } from '@/components'
   export default {
     name: 'RankItem',
@@ -39,7 +39,6 @@
         bronze: props.index === 2,
       })
       return {
-        formatDateTime,
         randIndex,
         rankClass
       }
