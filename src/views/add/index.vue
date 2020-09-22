@@ -199,7 +199,7 @@ export default {
           if (!isNil(state.bookId)) {
             return createInstance(state.bookId)
           } else {
-            const uploadUrl = await uploadImg({url: state.picturePath[0] })
+            const uploadUrl = await uploadImg({url: state.picturePath[0].url })
             return createBook({
               author: state.author,
               name: state.name,
